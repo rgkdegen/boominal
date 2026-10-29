@@ -1,0 +1,14 @@
+[
+ {"ticker":"GHOST","mc":48000,"ageSec":120,"devHoldPct":31.0,"holders":58,"top10Pct":61,"bundledPct":22,"mentionsPerMin":0.9,"botMentionPct":71,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":400,"copycatOf":null},
+ {"ticker":"PUMPKN","mc":186000,"ageSec":660,"devHoldPct":1.8,"holders":612,"top10Pct":18,"bundledPct":3,"mentionsPerMin":14.2,"botMentionPct":12,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":2900,"copycatOf":null},
+ {"ticker":"GHOUL","mc":72000,"ageSec":240,"devHoldPct":6.2,"holders":140,"top10Pct":39,"bundledPct":9,"mentionsPerMin":2.1,"botMentionPct":20,"lpBurned":false,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":600,"copycatOf":null},
+ {"ticker":"HEX","mc":210000,"ageSec":540,"devHoldPct":4.4,"holders":402,"top10Pct":27,"bundledPct":14,"mentionsPerMin":9.6,"botMentionPct":18,"lpBurned":true,"mintRevoked":false,"sellTaxPct":99,"socialsAgeMin":1200,"copycatOf":null},
+ {"ticker":"WITCH","mc":164000,"ageSec":420,"devHoldPct":2.1,"holders":880,"top10Pct":16,"bundledPct":2,"mentionsPerMin":18.4,"botMentionPct":9,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":3100,"copycatOf":null},
+ {"ticker":"MUMMY","mc":95000,"ageSec":300,"devHoldPct":3.9,"holders":96,"top10Pct":58,"bundledPct":71,"mentionsPerMin":1.3,"botMentionPct":25,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":500,"copycatOf":null},
+ {"ticker":"CRYPT","mc":33000,"ageSec":60,"devHoldPct":8.0,"holders":41,"top10Pct":52,"bundledPct":12,"mentionsPerMin":0.7,"botMentionPct":64,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":30,"copycatOf":"WITCH"},
+ {"ticker":"SKULL","mc":58000,"ageSec":180,"devHoldPct":5.5,"holders":133,"top10Pct":44,"bundledPct":8,"mentionsPerMin":31.0,"botMentionPct":92,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":800,"copycatOf":null},
+ {"ticker":"CANDY","mc":241000,"ageSec":840,"devHoldPct":2.6,"holders":1044,"top10Pct":21,"bundledPct":4,"mentionsPerMin":22.7,"botMentionPct":14,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":4000,"copycatOf":null},
+ {"ticker":"ZOMBI","mc":27000,"ageSec":50,"devHoldPct":7.1,"holders":62,"top10Pct":47,"bundledPct":11,"mentionsPerMin":1.1,"botMentionPct":30,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":3,"copycatOf":null},
+ {"ticker":"BATZ","mc":88000,"ageSec":360,"devHoldPct":9.4,"holders":77,"top10Pct":64,"bundledPct":19,"mentionsPerMin":3.0,"botMentionPct":28,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":700,"copycatOf":null},
+ {"ticker":"SPOOKY","mc":312000,"ageSec":1080,"devHoldPct":1.2,"holders":1530,"top10Pct":14,"bundledPct":1,"mentionsPerMin":27.9,"botMentionPct":8,"lpBurned":true,"mintRevoked":true,"sellTaxPct":0,"socialsAgeMin":5200,"copycatOf":null}
+]
