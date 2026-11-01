@@ -102,6 +102,7 @@ Sample output:
 | `terminal/part2.html` | **II · The Cauldron**: Boo decompiles contract bytecode, buries 11 rugs | +13.13 SOL |
 | `terminal/part3.html` | **III · The Séance**: ghosts of buried rugs snitch on their devs' new launches | +31.31 SOL |
 | `terminal/rider.html` | **BOO RIDER**: arcade run, catch pumps, jump rugs, paint the chart | +21.37 SOL |
+| `terminal/nightshift.html` | **NIGHT SHIFT**: you sleep 00:00 → 08:00, Boo trades at the desk | +24.80 SOL |
 
 Export any episode: `node scripts/render.js out.mp4 [audio] part2.html`
 
