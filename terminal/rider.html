@@ -1,0 +1,224 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>BOO RIDER</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:CR;src:url(../assets/fonts/creepster-latin-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#07060f}
+body{font-family:JB,monospace;color:#f3eee6;font-size:12px}
+.abs{position:absolute}
+#app{position:absolute;inset:0;overflow:hidden}
+.panel{position:absolute;background:rgba(14,10,26,.9);border:1px solid #2c2244;border-radius:8px}
+.ph{position:absolute;left:12px;top:9px;font-size:11px;font-weight:800;letter-spacing:.6px}
+.pt{position:absolute;right:12px;top:9px;font-size:10px}
+.g{color:#7cff4f}.r{color:#ff4d6d}.o{color:#ff9a2e}.p{color:#c9a4ff}.d{color:#857aa3}.y{color:#ffd34d}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.4px;white-space:pre}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#scan{position:absolute;inset:0;z-index:61;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px)}
+#outro{position:absolute;inset:0;z-index:70;opacity:0}
+#outro .c{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <canvas id="cv" class="abs" width="1080" height="1010" style="left:0;top:0"></canvas>
+ <div id="booWrap" class="abs" style="left:0;top:0;width:150px;height:170px;z-index:20;transform-origin:75px 120px">
+  <svg class="abs" width="210" height="60" style="left:-30px;top:118px;overflow:visible;transform:scaleX(-1)">
+   <path d="M10,26 L170,30" stroke="#5a3a1c" stroke-width="7" stroke-linecap="round"/><path d="M10,26 L170,30" stroke="#ff9a2e" stroke-width="1.6" opacity=".55"/>
+   <path id="bristle" d="M150,30 C170,8 200,10 214,18 C206,26 212,34 214,44 C200,52 170,50 150,30 Z" fill="#d79a3a" stroke="#ff7a1a" stroke-width="2"/>
+   <path d="M156,26 L208,20 M158,32 L212,34 M156,36 L206,46" stroke="#8a5a1c" stroke-width="1.4"/>
+   <rect x="146" y="24" width="8" height="12" rx="2" fill="#b07cff"/>
+  </svg>
+  <div id="boo" class="abs" style="left:12px;top:0;width:110px;height:145px"></div>
+ </div>
+ <!-- HUD -->
+ <div class="abs" style="left:0;top:0;width:1080px;height:128px;background:linear-gradient(180deg,rgba(7,6,15,.95),rgba(7,6,15,.6) 70%,rgba(7,6,15,0));z-index:30"></div>
+ <div class="abs" style="left:18px;top:10px;font-family:RB;font-weight:900;font-size:40px;color:#ff7a1a;text-shadow:0 0 16px rgba(255,122,26,.7);z-index:31;letter-spacing:1px">BOO<span style="color:#b07cff;text-shadow:0 0 16px rgba(176,124,255,.8);margin-left:10px">RIDER</span></div>
+ <div class="abs d" style="left:20px;top:60px;font-size:11px;z-index:31">nov 1 · halloween is over · Boo isn't</div>
+ <div class="abs d" id="lvl" style="left:20px;top:80px;font-size:11px;z-index:31;font-weight:800;letter-spacing:.5px">LVL 1 · PUMP.FUN TRENCHES</div>
+ <div class="abs" style="left:390px;top:10px;width:300px;text-align:center;z-index:31">
+  <div class="d" style="font-size:10.5px;font-weight:800;letter-spacing:2px">SCORE · SOL</div>
+  <div id="score" style="font-size:52px;font-weight:800;color:#7cff4f;text-shadow:0 0 18px rgba(124,255,79,.6);letter-spacing:-1px;line-height:58px">+0.00</div>
+  <div id="cd" style="font-size:11px" class="d">caught 0 · dodged 0</div>
+ </div>
+ <div class="abs" style="right:18px;top:12px;width:300px;text-align:right;z-index:31"><style>#combo{transform-origin:right center}</style>
+  <svg id="lives" width="190" height="24" style="display:inline-block"></svg>
+  <div id="combo" style="font-family:RB;font-weight:900;font-size:34px;color:#ffd34d;text-shadow:0 0 14px rgba(255,211,77,.6);line-height:40px">x0</div>
+  <div class="d" style="font-size:10.5px;font-weight:800;letter-spacing:1px">COMBO · 9 LIVES</div>
+ </div>
+ <div id="pops" class="abs" style="left:0;top:0;z-index:35"></div>
+
+ <!-- bottom -->
+ <div class="panel" style="left:16px;top:1020px;width:330px;height:266px">
+  <div class="ph y">RADAR · next 5</div><div class="pt d">Boo pre-checks</div>
+  <div id="radar" class="abs" style="left:12px;right:12px;top:34px;font-size:11px;line-height:44px"></div>
+ </div>
+ <div class="panel" style="left:358px;top:1020px;width:400px;height:266px">
+  <div class="ph o">boo.log <span class="d" style="font-weight:400">· rider mode</span></div><div class="pt g" id="lps"></div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="panel" style="left:770px;top:1020px;width:294px;height:266px">
+  <div class="ph p">RUN STATS</div><div class="pt d">live</div>
+  <div id="stats" class="abs" style="left:14px;right:14px;top:36px;font-size:11.5px;line-height:30px"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,#ff7a1a,#b07cff,#7cff4f);box-shadow:0 0 8px #b07cff"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">CATCH THE PUMPS · JUMP THE RUGS · PAINT THE CHART</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">built by RUGIKK · simulated run · @rgk_degen</div>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <canvas id="ocv" class="abs" width="1080" height="1350" style="left:0;top:0"></canvas>
+ <div class="c" id="oNH" style="top:90px;font-size:22px;font-weight:800;color:#ffd34d;letter-spacing:6px;text-shadow:0 0 12px rgba(255,211,77,.7)">★ NEW HIGH SCORE ★</div>
+ <div class="c" id="oT" style="top:126px;font-family:RB;font-weight:900;font-size:130px;color:#ff7a1a;text-shadow:0 0 30px rgba(255,122,26,.8);letter-spacing:2px">BOO<span style="color:#b07cff;text-shadow:0 0 30px rgba(176,124,255,.9);margin-left:24px">RIDER</span></div>
+ <div class="c" id="oS" style="top:288px;font-family:CR;font-size:46px;color:#7cff4f;letter-spacing:3px;text-shadow:0 0 16px rgba(124,255,79,.8)">halloween is over. Boo isn't.</div>
+ <div id="oBoo" class="abs" style="left:0;top:0;width:220px;height:250px;transform-origin:110px 180px">
+  <svg class="abs" width="330" height="80" style="left:-50px;top:180px;overflow:visible;transform:scaleX(-1)">
+   <path d="M10,36 L250,42" stroke="#5a3a1c" stroke-width="10" stroke-linecap="round"/><path d="M220,40 C250,8 296,12 318,26 C306,38 314,50 318,64 C296,76 250,72 220,40 Z" fill="#d79a3a" stroke="#ff7a1a" stroke-width="3"/><rect x="214" y="32" width="12" height="18" rx="3" fill="#b07cff"/>
+  </svg>
+  <div id="oBooC" class="abs" style="left:20px;top:0;width:160px;height:211px"></div>
+ </div>
+ <div class="c" id="oScore" style="top:880px;font-size:84px;font-weight:800;color:#7cff4f;text-shadow:0 0 26px rgba(124,255,79,.7)">+21.37 SOL</div>
+ <div class="c" id="oStats" style="top:988px;font-size:19px;font-weight:800"><span class="g">8 pumps caught</span> &nbsp;·&nbsp; <span class="r">10 rugs jumped</span> &nbsp;·&nbsp; <span class="y">x18 combo</span> &nbsp;·&nbsp; 9/9 lives</div>
+ <div class="c d" id="oFlow" style="top:1030px;font-size:12px">part I +6.66 · part II +13.13 · part III +31.31 · rider +21.37</div>
+ <div class="c" id="oPress" style="top:1086px;font-size:20px;font-weight:800;color:#fff;letter-spacing:4px">PRESS START FOR NEXT RUN</div>
+ <div class="c" id="oB" style="top:1150px;font-family:RB;font-weight:700;font-size:30px;color:#ff9a2e;text-shadow:0 0 14px rgba(255,160,64,.6)">built by RUGIKK</div>
+ <div class="c d" id="oF" style="top:1196px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+</div>
+<div id="scan"></div>
+<script src="_shared.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3);
+const C='catch',R='rug';
+const EV=[
+ [R,'HANGOVER','dev holds 41%'],[C,'BROOM',1.84],[R,'LEFTOVER','LP pull'],[R,'COSTUME','copycat'],[C,'MOONCAT',2.71],
+ [R,'CANDYRUG','sell tax 99%'],[C,'NINE',3.05],[R,'MASK','bundled 72%'],[R,'SPOOK2','mint live'],[C,'LEAF',1.66],
+ [R,'GLITCH','freeze auth'],[C,'EMBER',2.48],[R,'WRAPPED','hidden proxy'],[C,'COVEN',3.33],[R,'PIE','blacklist fn'],
+ [R,'FOG','dev sold 100%'],[C,'OWL',2.20],[C,'NOVEMBER',4.10]
+].map((e,i)=>({k:e[0],t:e[1],v:e[2],te:2.4+i*1.25,i}));
+const TEND=24.2, TOUT=25.4, SPEED=120, BX=360;
+// pnl over time
+function pnlAt(t){let p=0;EV.forEach(e=>{if(e.k==C)p+=e.v*eo(clamp((t-e.te)/.45))});return p}
+const PY=p=>880-p*26; // chart y in canvas coords
+function baseY(t){return PY(pnlAt(t))-118+Math.sin(t*2.1)*8}
+EV.forEach(e=>{e.y=baseY(e.te)+(e.k==C?30+Math.sin(e.i*1.7)*40:112);e.wx=BX+e.te*SPEED});
+function booY(t){let y=baseY(t);EV.forEach(e=>{const d=(t-e.te);if(e.k==C){const w=Math.exp(-((d/.42)**2));y=lerp(y,e.y-55,w)}else{y-=140*Math.exp(-((d/.36)**2))}});return y}
+// candles: one per 0.15s up to now
+const DT=.15;function candle(i){const t=i*DT;const r=rng(i*31+7);const c=pnlAt(t)+(r()-.5)*.5;const o=pnlAt(Math.max(0,t-DT))+(r()-.5)*.5;
+ return {o,c,h:Math.max(o,c)+r()*.5,l:Math.min(o,c)-r()*.5,t}}
+// stars
+const STARS=[...Array(140)].map((_,i)=>{const r=rng(i+1);return {x:r()*1080,y:r()*980,s:.5+r()*1.6,ph:r()*6,par:.05+r()*.25}});
+const BATS2=[[3.5,5,200],[11,5,240],[18,5,180]];
+const SN=['0xdead','mint()','LP.lock','bundle?','dev 41%','freeze?','proxy','sig ok','ape 0.5','tp 2x','sl -35%','fee()'];
+// log
+const LOG=[];{LOG.push({t:.1,s:'<span class="o">rgk@boominal</span>:~$ ./boo --rider --broom'});LOG.push({t:.6,s:'<span class="p">=^.^= halloween ended. Boo found a broom.</span>'});
+ const r=rng(5);let tt=.9;while(tt<TEND){LOG.push({t:tt,s:`<span class="d">scan ${Math.floor(r()*36**6).toString(36)} → ${['clean','clean','rug?','clean','skip'][Math.floor(r()*5)]}</span>`});tt+=.16+r()*.12}
+ EV.forEach(e=>{LOG.push({t:e.te-1.6,s:`<span class="y">[radar]</span> $${e.t} incoming · ${e.k==C?'<span class="g">pump</span>':'<span class="r">rug: '+e.v+'</span>'}`});
+  LOG.push({t:e.te,s:e.k==C?`<span class="g">[catch] $${e.t} · ape 0.5 → +${e.v.toFixed(2)} SOL</span>`:`<span class="r">[jump] $${e.t} · ${e.v} · 0 SOL lost</span>`})});LOG.sort((a,b)=>a.t-b.t)}
+$('boo').innerHTML=catSVG('m');$('oBooC').innerHTML=catSVG('o');
+function setCat(root,state,t){const col={idle:['#ffb020','#ff6a00'],look:['#ffe14d','#ff9a00'],trick:['#ff4d4d','#c4002a'],treat:['#7cff4f','#2fb000']}[state];
+ root.style.setProperty('--ec',col[0]);root.style.setProperty('--ec2',col[1]);
+ const open=root.querySelector('.e-open'),happy=root.querySelector('.e-happy'),brow=root.querySelector('.e-brow');
+ happy.style.display=state=='treat'?'':'none';open.style.display=state=='treat'?'none':'';brow.style.display=state=='trick'?'':'none';
+ root.querySelectorAll('.pup').forEach(p=>p.setAttribute('transform',`translate(${state=='look'?4:Math.sin(t*1.3)*2},0)`));
+ const id=root.querySelector('[id^=tail]').id.slice(4);root.querySelector('#tail'+id).setAttribute('transform',`rotate(${Math.sin(t*5)*14} 150 262)`)}
+function pumpkinLives(){let h='';for(let i=0;i<9;i++)h+=`<g transform="translate(${i*21},0) scale(.5)">${pumpkinSVG(40,36,1,'l'+i).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`;$('lives').innerHTML=h}pumpkinLives();
+
+const cv=$('cv'),cx=cv.getContext('2d');
+function skull(x,y,s,a){cx.save();cx.translate(x,y);cx.scale(s,s);cx.globalAlpha=a;
+ cx.shadowColor='#ff2d55';cx.shadowBlur=18;cx.fillStyle='#2a0610';cx.strokeStyle='#ff4d6d';cx.lineWidth=3;
+ cx.beginPath();cx.arc(0,0,30,0,7);cx.fill();cx.stroke();cx.shadowBlur=0;
+ cx.fillStyle='#f3e6e6';cx.beginPath();cx.arc(0,-4,16,Math.PI,0);cx.lineTo(16,6);cx.lineTo(10,12);cx.lineTo(-10,12);cx.lineTo(-16,6);cx.closePath();cx.fill();
+ cx.fillStyle='#2a0610';cx.beginPath();cx.arc(-6,-2,4.5,0,7);cx.arc(6,-2,4.5,0,7);cx.fill();
+ cx.fillRect(-1.5,4,3,4);cx.fillStyle='#ff4d6d';cx.fillRect(-8,13,16,2);cx.restore()}
+function coin(x,y,s,a,t){cx.save();cx.translate(x,y);cx.scale(s,s);cx.globalAlpha=a;cx.shadowColor='#7cff4f';cx.shadowBlur=22;
+ const g=cx.createRadialGradient(-8,-8,4,0,0,30);g.addColorStop(0,'#eaffde');g.addColorStop(.5,'#7cff4f');g.addColorStop(1,'#1f8a12');
+ cx.fillStyle=g;cx.beginPath();cx.ellipse(0,0,30*Math.abs(Math.cos(t*3))+4,30,0,0,7);cx.fill();cx.shadowBlur=0;
+ cx.fillStyle='#0a3a08';cx.font='900 26px RB';cx.textAlign='center';cx.textBaseline='middle';if(Math.abs(Math.cos(t*3))>.35)cx.fillText('◎',0,1);cx.restore()}
+function label(x,y,txt,sub,col){cx.font='800 13px JB';cx.textAlign='center';cx.fillStyle=col;cx.shadowColor=col;cx.shadowBlur=8;cx.fillText(txt,x,y);cx.shadowBlur=0;cx.font='10px JB';cx.fillStyle='#d9d0e8';cx.fillText(sub,x,y+14)}
+function batC(x,y,s,f){cx.save();cx.translate(x,y);cx.scale(s,s*(.35+.65*Math.abs(Math.sin(f))));cx.fillStyle='#0a0610';cx.strokeStyle='#b07cff';cx.lineWidth=1.2;cx.fill(new Path2D(BATP));cx.stroke(new Path2D(BATP));cx.restore()}
+
+function render(t){
+ const tt=Math.min(t,TEND+.6);const cam=tt*SPEED;
+ // background
+ const g=cx.createLinearGradient(0,0,0,1010);g.addColorStop(0,'#0a0718');g.addColorStop(.6,'#120a24');g.addColorStop(1,'#1a0c1e');cx.fillStyle=g;cx.fillRect(0,0,1080,1010);
+ STARS.forEach(s=>{const x=((s.x-cam*s.par)%1080+1080)%1080;cx.globalAlpha=.4+.6*Math.abs(Math.sin(t*1.5+s.ph));cx.fillStyle='#fff';cx.fillRect(x,s.y,s.s,s.s)});cx.globalAlpha=1;
+ // moon
+ const mx=860-cam*.03,my=230;const mg=cx.createRadialGradient(mx,my,10,mx,my,170);mg.addColorStop(0,'rgba(255,230,190,.95)');mg.addColorStop(.42,'rgba(255,200,140,.9)');mg.addColorStop(.46,'rgba(255,150,60,.25)');mg.addColorStop(1,'rgba(255,122,26,0)');
+ cx.fillStyle=mg;cx.beginPath();cx.arc(mx,my,170,0,7);cx.fill();cx.fillStyle='rgba(200,150,110,.25)';[[-30,-20,14],[25,10,10],[-5,35,8]].forEach(([a,b,r])=>{cx.beginPath();cx.arc(mx+a,my+b,r,0,7);cx.fill()});
+ // far hills
+ cx.fillStyle='#120a1f';cx.beginPath();cx.moveTo(0,1010);for(let x=0;x<=1080;x+=20){const wx=x+cam*.25;cx.lineTo(x,820+Math.sin(wx*.006)*50+Math.sin(wx*.017)*20)}cx.lineTo(1080,1010);cx.fill();
+ // code streams
+ cx.font='700 11px JB';for(let l=0;l<6;l++){const y=170+l*140;const r=rng(l+40);let s='';for(let k=0;k<20;k++)s+=SN[Math.floor(r()*SN.length)]+'   ';const dir=l%2?1:-1;const x=((t*(60+l*20)*dir)%1600);cx.fillStyle=['#b07cff','#ff9a2e','#7cff4f'][l%3];cx.globalAlpha=.07;cx.fillText(s,x-(dir>0?1600:0),y);cx.fillText(s,x+(dir>0?0:1600),y);cx.globalAlpha=1}
+ // grid + axis
+ cx.strokeStyle='rgba(176,124,255,.08)';cx.lineWidth=1;for(let p=0;p<=24;p+=4){const y=PY(p);cx.beginPath();cx.moveTo(0,y);cx.lineTo(1080,y);cx.stroke();cx.fillStyle='rgba(201,164,255,.35)';cx.font='10px JB';cx.textAlign='right';cx.fillText('+'+p+' SOL',1072,y-4)}
+ // candles painted behind Boo
+ const nNow=Math.floor(tt/DT);const cw=SPEED*DT;
+ for(let i=Math.max(0,nNow-Math.ceil(BX/cw)-2);i<=nNow;i++){const c=candle(i);const x=BX+(c.t-tt)*SPEED-14;if(x<-20)continue;const up=c.c>=c.o;const col=up?'#7cff4f':'#ff4d6d';
+  cx.strokeStyle=col;cx.fillStyle=up?'rgba(124,255,79,.75)':'rgba(255,77,109,.75)';cx.lineWidth=1.5;cx.beginPath();cx.moveTo(x,PY(c.h));cx.lineTo(x,PY(c.l));cx.stroke();
+  const y1=PY(Math.max(c.o,c.c)),y2=PY(Math.min(c.o,c.c));cx.shadowColor=col;cx.shadowBlur=6;cx.fillRect(x-cw*.32,y1,cw*.64,Math.max(2,y2-y1));cx.shadowBlur=0}
+ // pnl line
+ cx.strokeStyle='rgba(124,255,79,.6)';cx.lineWidth=2;cx.beginPath();for(let x=0;x<=BX;x+=4){const tt2=tt-(BX-x)/SPEED;if(tt2<0)continue;const y=PY(pnlAt(tt2));x?cx.lineTo(x,y):cx.moveTo(x,y)}cx.stroke();
+ // sparkle trail
+ for(let k=0;k<26;k++){const td=tt-k*.035;if(td<0)break;const x=BX-110-(tt-td)*SPEED*1.4,y=booY(td)+120+Math.sin(td*40+k)*4;cx.globalAlpha=(1-k/26)*.9;cx.fillStyle=k%3?'#ff9a2e':'#b07cff';cx.beginPath();cx.arc(x,y,3.5*(1-k/26)+1,0,7);cx.fill()}cx.globalAlpha=1;
+ // objects
+ EV.forEach(e=>{const x=e.wx-cam;if(x<-80||x>1160)return;const d=tt-e.te;
+  if(e.k==C){if(d>0){// caught burst
+     const u=clamp(d/.5);for(let s=0;s<16;s++){const a=s/16*6.283;cx.globalAlpha=1-u;cx.fillStyle='#7cff4f';cx.beginPath();cx.arc(BX+60+Math.cos(a)*u*90,e.y+Math.sin(a)*u*90,4,0,7);cx.fill()}cx.globalAlpha=1;return}
+   coin(x,e.y+Math.sin(t*3+e.i)*6,1,1,t+e.i);label(x,e.y-44,'$'+e.t,'+'+e.v.toFixed(2)+' SOL','#7cff4f')}
+  else{const yy=e.y+Math.sin(t*2+e.i)*5;
+   // dripping red candles under skull
+   for(let k=0;k<4;k++){const h=20+k*14;cx.fillStyle='rgba(255,77,109,.55)';cx.fillRect(x-22+k*13,yy+36+k*10,8,h)}
+   skull(x,yy,1,d>.6?clamp(1-(d-.6)/.6):1);if(d<.3)label(x,yy-44,'$'+e.t,'RUG · '+e.v,'#ff4d6d');else{cx.font='800 12px JB';cx.fillStyle='#ffd34d';cx.textAlign='center';cx.globalAlpha=clamp(1-(d-.3)/1.2);cx.fillText('JUMPED ✓',x,yy-44);cx.globalAlpha=1}}});
+ // bats
+ BATS2.forEach(([t0,du,y],i)=>{const u=(t-t0)/du;if(u<0||u>1)return;batC(lerp(1120,-40,u),y+Math.sin(u*10)*24,1.6,t*14+i)});
+ // boo element
+ const by=booY(tt),by2=booY(tt-.05);const tilt=clamp((by-by2)*.9,-22,22);const bob=Math.sin(t*6)*3;
+ const bw=$('booWrap');bw.style.transform=`translate(${BX-75}px,${by-30+bob}px) rotate(${tilt}deg)`;
+ let st='idle';const near=EV.find(e=>Math.abs(tt-e.te)<.5);if(near)st=near.k==C?(tt>near.te?'treat':'look'):'trick';
+ setCat($('boo').querySelector('svg'),st,t);
+ // HUD
+ const pnl=pnlAt(t);$('score').textContent='+'+pnl.toFixed(2);
+ const done=EV.filter(e=>tt>=e.te);const caught=done.filter(e=>e.k==C).length,dodged=done.length-caught;$('cd').textContent=`caught ${caught} · jumped ${dodged}`;
+ $('combo').textContent='x'+done.length;{let k=1;if(done.length){const dd=tt-done[done.length-1].te;if(dd<0.25)k=1+0.25*(1-dd/0.25)}$('combo').style.transform='scale('+k+')'}
+ $('lvl').textContent=`LVL ${1+Math.floor(done.length/5)} · PUMP.FUN TRENCHES`;
+ // popups
+ let ph='';EV.forEach(e=>{const d=tt-e.te;if(d<0||d>1.1)return;const a=1-clamp((d-.6)/.5);const y=e.y-60-d*70;
+  ph+=`<div class="abs" style="left:${BX-90}px;top:${y-70}px;opacity:${a};font-size:${e.k==C?26:20}px;font-weight:800;white-space:nowrap;color:${e.k==C?'#7cff4f':'#ffd34d'};text-shadow:0 0 12px ${e.k==C?'#7cff4f':'#ffd34d'};transform:scale(${1+eo(clamp(d/.15))*.1})">${e.k==C?'+'+e.v.toFixed(2)+' SOL':'RUG JUMPED'}<div style="font-size:11px;color:#d9d0e8;text-shadow:none">${e.k==C?'$'+e.t+' · x'+(e.i+1)+' combo':'$'+e.t+' · '+e.v}</div></div>`});$('pops').innerHTML=ph;
+ // radar
+ const nxt=EV.filter(e=>e.te>tt).slice(0,5);$('radar').innerHTML=nxt.map((e,j)=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid #2c2244;${j==0?'color:#fff;':''}"><span>${e.k==C?'<span class="g">◎</span>':'<span class="r">☠</span>'} $${e.t}</span><span class="${e.k==C?'g':'r'}">${e.k==C?'PUMP · catch':'RUG · '+e.v}</span><span class="d">${(e.te-tt).toFixed(1)}s</span></div>`).join('')||'<span class="d">sky is clear</span>';
+ $('log').innerHTML=LOG.filter(e=>e.t<=t).slice(-15).map(e=>e.s).join('\n');$('lps').textContent=Math.round(9+Math.abs(Math.sin(t*2))*6)+' l/s';
+ const best=Math.max(0,...done.filter(e=>e.k==C).map(e=>e.v));
+ $('stats').innerHTML=`<div style="display:flex;justify-content:space-between"><span class="d">pumps caught</span><span class="g">${caught} / 8</span></div>
+ <div style="display:flex;justify-content:space-between"><span class="d">rugs jumped</span><span class="r">${dodged} / 10</span></div>
+ <div style="display:flex;justify-content:space-between"><span class="d">best catch</span><span class="g">+${best.toFixed(2)}</span></div>
+ <div style="display:flex;justify-content:space-between"><span class="d">lives lost</span><span class="y">0</span></div>
+ <div style="display:flex;justify-content:space-between"><span class="d">rugs held</span><span class="y">0</span></div>
+ <div style="display:flex;justify-content:space-between"><span class="d">altitude</span><span class="p">${Math.round(1010-by)} ft</span></div>`;
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ // flash
+ const last=done[done.length-1];let f=0,fc='124,255,79';if(last&&tt-last.te<.2){f=(1-(tt-last.te)/.2)*(last.k==C?.14:.1);fc=last.k==C?'124,255,79':'255,211,77'}
+ $('flash').style.opacity=f;$('flash').style.background=`radial-gradient(circle at 35% 50%,rgba(${fc},0),rgba(${fc},.85))`;
+ // outro
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;$('app').style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';
+ if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){const oc=$('ocv').getContext('2d');oc.clearRect(0,0,1080,1350);
+ const mg=oc.createRadialGradient(540,600,20,540,600,300);mg.addColorStop(0,'rgba(255,230,190,.55)');mg.addColorStop(.6,'rgba(255,170,90,.35)');mg.addColorStop(.64,'rgba(255,122,26,.12)');mg.addColorStop(1,'rgba(255,122,26,0)');oc.fillStyle=mg;oc.beginPath();oc.arc(540,600,300,0,7);oc.fill();
+ for(let i=0;i<40;i++){const r=rng(i+900);const a=r()*6.283,d=(s*300*(.5+r()))%700;oc.fillStyle=['#7cff4f','#ff9a2e','#b07cff','#ffd34d'][i%4];oc.globalAlpha=.7;oc.fillRect(540+Math.cos(a)*d,600+Math.sin(a)*d,3,3)}oc.globalAlpha=1;
+ const a=eo(clamp(s/.6));$('oT').style.transform=`scale(${lerp(.6,1,a)})`;$('oT').style.opacity=a;
+ [['oNH',.1],['oS',.35],['oScore',.7],['oStats',.95],['oFlow',1.1],['oB',1.3],['oF',1.4]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v*(id=='oNH'?(Math.floor(s*4)%2?1:.45):1);$(id).style.transform=`translateY(${(1-v)*16}px)`});
+ $('oPress').style.opacity=s>1.2&&Math.floor(s*2.5)%2?1:0;
+ // Boo flies across the moon
+ const u=clamp(s/4.2);const x=lerp(-260,1180,u),y=560+Math.sin(u*Math.PI*2)*40;$('oBoo').style.transform=`translate(${x}px,${y-160}px) rotate(${Math.cos(u*Math.PI*2)*-8}deg)`;
+ setCat($('oBooC').querySelector('svg'),'treat',t);
+}
+window.render=render;
+document.fonts.ready.then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>

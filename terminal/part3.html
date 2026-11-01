@@ -1,0 +1,351 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>BOOMINAL III · The Séance</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:CR;src:url(../assets/fonts/creepster-latin-400-normal.woff2)}
+:root{--bg:#0b0508;--pan:rgba(20,8,13,.88);--bd:#3a1622;--bd2:#5a2032;--tx:#f6e7e0;--dim:#9a6f78;--dim2:#5e3a44;
+ --rd:#ff2d55;--gd:#ffc861;--gh:#9ff3ff;--gr:#7cff4f;--pu:#b07cff;--or:#ff7a1a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:JB,monospace;color:var(--tx);font-size:12px}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(420px 420px at 540px 280px,rgba(255,45,85,.16),transparent 70%),
+ radial-gradient(900px 600px at 50% 120%,rgba(159,243,255,.07),transparent 70%),
+ radial-gradient(700px 500px at 0% 0%,rgba(176,124,255,.08),transparent 70%),var(--bg)}
+#app::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,200,97,.05) 1px,transparent 1px);background-size:18px 18px}
+#vig{position:absolute;inset:0;z-index:88;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.55))}
+#flash{position:absolute;inset:0;z-index:89;pointer-events:none;opacity:0}
+.abs{position:absolute}
+.panel{position:absolute;background:var(--pan);border:1px solid var(--bd);border-radius:8px}
+.ph{position:absolute;left:12px;top:9px;font-size:11px;font-weight:800;letter-spacing:.6px}
+.pt{position:absolute;right:12px;top:9px;font-size:10px}
+.r{color:#ff5a78}.g{color:var(--gr)}.gd{color:var(--gd)}.gh{color:var(--gh)}.d{color:var(--dim)}.p{color:#c9a4ff}
+#title{left:16px;top:8px;font-family:RB;font-weight:900;font-size:32px;color:var(--or);text-shadow:0 0 14px rgba(255,122,26,.6)}
+#title b{color:var(--rd);text-shadow:0 0 14px rgba(255,45,85,.9);margin-left:6px}
+#pill{left:262px;top:15px;font-family:CR;font-size:18px;color:var(--gh);padding:1px 10px 0;border:1px solid rgba(159,243,255,.5);border-radius:6px;background:rgba(159,243,255,.07);text-shadow:0 0 8px rgba(159,243,255,.8);letter-spacing:1.5px}
+#clock{left:430px;top:12px;font-size:22px;font-weight:800;color:var(--gd);text-shadow:0 0 12px rgba(255,200,97,.6)}
+#clockS{left:560px;top:21px;font-size:10.5px;color:var(--dim)}
+#built{right:16px;top:20px;font-size:13px;font-weight:700;color:var(--or)}
+.kpi .h{position:absolute;left:12px;top:9px;font-size:10.5px;font-weight:700;letter-spacing:.4px}
+.kpi .big{position:absolute;left:11px;top:25px;font-size:36px;font-weight:800;letter-spacing:-1px}
+.kpi .s{position:absolute;left:12px;bottom:8px;font-size:9.5px;color:var(--dim)}
+.wrow{position:absolute;left:8px;right:8px;height:44px;border-radius:6px;border:1px solid transparent}
+.wrow.on{border-color:var(--gh);background:rgba(159,243,255,.1);box-shadow:0 0 16px rgba(159,243,255,.35)}
+.wrow.used{background:rgba(255,45,85,.06)}
+.wrow .nm{position:absolute;left:44px;top:6px;font-size:11px;font-weight:800}
+.wrow .dv{position:absolute;left:44px;top:23px;font-size:9.5px;color:var(--dim)}
+.wrow .tg{position:absolute;right:8px;top:14px;font-size:8.5px;font-weight:800;padding:2px 5px;border-radius:4px}
+.wrow svg{position:absolute;left:6px;top:4px}
+#banner{left:286px;top:734px;width:508px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;letter-spacing:1.5px;z-index:25;white-space:nowrap}
+.tile{position:absolute;top:34px;width:80px;height:54px;border:1px solid var(--bd2);border-radius:6px;font-size:10px;text-align:center;color:var(--dim)}
+.tile .tk{position:absolute;left:0;right:0;top:8px;font-weight:800}
+.tile .oc{position:absolute;left:0;right:0;top:28px;font-size:9px}
+.tile.cur{border-color:var(--gd);background:rgba(255,200,97,.14);color:#fff}
+.tile.no{border-color:rgba(255,45,85,.6);background:rgba(255,45,85,.08);color:#ff8aa0}
+.tile.yes{border-color:rgba(124,255,79,.6);background:rgba(124,255,79,.08);color:var(--gr)}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.2px;white-space:pre}
+.stream{position:absolute;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:1px}
+#outro{position:absolute;inset:0;z-index:80;opacity:0}
+#outro .c{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div id="streams"></div>
+ <div id="title" class="abs">BOOMINAL<b>III</b></div>
+ <div id="pill" class="abs">THE SÉANCE</div>
+ <div id="clock" class="abs">23:59:30</div>
+ <div id="clockS" class="abs">oct 31 · until midnight</div>
+ <div id="built" class="abs">built by RUGIKK</div>
+
+ <div class="panel kpi" style="left:16px;top:56px;width:254px;height:94px"><div class="h">SPIRITS SUMMONED</div><div class="big gh" id="k1" style="text-shadow:0 0 14px rgba(159,243,255,.6)">0</div><div class="s">ghosts of rugs Boo buried in part II</div></div>
+ <div class="panel kpi" style="left:282px;top:56px;width:254px;height:94px"><div class="h">SERIAL RUGGERS CAUGHT</div><div class="big r" id="k2" style="text-shadow:0 0 14px rgba(255,45,85,.6)">0</div><div class="s" id="k2s">devs back with a new coin</div></div>
+ <div class="panel kpi" style="left:548px;top:56px;width:254px;height:94px"><div class="h">WALLETS LINKED</div><div class="big gd" id="k3">0</div><div class="s">funders · bundles · dev hops</div></div>
+ <div class="panel kpi" style="left:814px;top:56px;width:250px;height:94px" id="pnlCard"><div class="h">SESSION PNL</div><div class="pt g">SOL</div><div class="big g" id="k4" style="text-shadow:0 0 16px rgba(124,255,79,.55)">+0.00</div><div class="s" id="k4s">0 treats · 0 rugs held</div></div>
+
+ <!-- left: ghost witnesses -->
+ <div class="panel" style="left:16px;top:162px;width:254px;height:560px;overflow:hidden" id="wit">
+  <div class="ph gh">GHOST WITNESSES</div><div class="pt d">part II rugs</div>
+ </div>
+ <!-- right: wallet web -->
+ <div class="panel" style="left:810px;top:162px;width:254px;height:560px;overflow:hidden">
+  <div class="ph gd">WALLET WEB</div><div class="pt d" id="webTag">0 edges</div>
+  <svg id="web" class="abs" width="254" height="530" style="left:0;top:28px"></svg>
+ </div>
+
+ <!-- center -->
+ <div id="launch" class="abs" style="left:286px;top:162px;width:508px;font-size:11px;text-align:center"></div>
+ <div id="moon" class="abs" style="left:420px;top:176px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle at 45% 40%,rgba(255,120,120,.32),rgba(255,45,85,.14) 50%,rgba(0,0,0,0) 72%)"></div>
+ <div id="boo" class="abs" style="left:446px;top:194px;width:188px;height:248px;z-index:3"></div>
+ <div id="bubble" class="abs" style="left:640px;top:214px;z-index:12;padding:4px 10px;border:1.5px solid var(--gd);border-radius:7px;font-size:13px;font-weight:800;background:rgba(14,6,8,.9);white-space:nowrap"></div>
+ <svg id="board" class="abs" width="508" height="340" style="left:286px;top:384px;z-index:5;overflow:visible"></svg>
+ <svg id="candles" class="abs" width="1080" height="800" style="left:0;top:0;z-index:6;pointer-events:none"></svg>
+ <svg id="plan" class="abs" width="508" height="340" style="left:286px;top:384px;z-index:8;overflow:visible"></svg>
+ <div id="banner" class="abs"></div>
+ <svg id="fly" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:30;pointer-events:none;overflow:visible"></svg>
+
+ <!-- transcript -->
+ <div class="panel" style="left:16px;top:790px;width:1048px;height:112px">
+  <div class="ph gh">SPIRIT TRANSCRIPT</div><div class="pt d" id="trTag">the board is quiet</div>
+  <div id="spell" class="abs" style="left:14px;top:34px;width:430px;font-size:44px;font-weight:800;letter-spacing:6px;color:var(--gh);text-shadow:0 0 16px rgba(159,243,255,.7);white-space:nowrap"></div>
+  <div class="abs" style="left:456px;top:30px;width:1px;height:70px;background:var(--bd2)"></div>
+  <div id="whisper" class="abs" style="left:472px;top:34px;width:560px;font-size:14px;line-height:21px"></div>
+ </div>
+ <!-- tiles -->
+ <div class="panel" style="left:16px;top:912px;width:1048px;height:98px" id="tiles">
+  <div class="ph gd">12 LAUNCHES TONIGHT</div><div class="pt" id="tileTag"></div>
+ </div>
+ <div class="panel" style="left:16px;top:1022px;width:520px;height:264px">
+  <div class="ph g">PNL · TRILOGY</div><div class="pt g" id="pnlTag">+0.00 SOL</div>
+  <svg id="chart" class="abs" style="left:10px;top:34px" width="500" height="220"></svg>
+ </div>
+ <div class="panel" style="left:548px;top:1022px;width:516px;height:264px">
+  <div class="ph" style="color:var(--or)">seance.log <span class="d" style="font-weight:400">· part III</span></div><div class="pt gd" id="lps">0 l/s</div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--gh),var(--gd),var(--rd));box-shadow:0 0 8px var(--rd)"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">NEW LAUNCH · SUMMON · GHOSTS SNITCH · YES / NO</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">part III · simulated run · metrics illustrative · @rgk_degen</div>
+ <svg id="decor" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:40;pointer-events:none"></svg>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oBg" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div class="c" id="oClock" style="top:60px;font-size:30px;font-weight:800;color:var(--gd);letter-spacing:4px;text-shadow:0 0 16px rgba(255,200,97,.7)">00:00:00</div>
+ <div class="c" id="oT" style="top:104px;font-family:RB;font-weight:900;font-size:116px;color:var(--or);text-shadow:0 0 30px rgba(255,122,26,.8)">BOOMINAL<span style="color:var(--rd);text-shadow:0 0 30px rgba(255,45,85,.95);margin-left:14px">III</span></div>
+ <div class="c" id="oH" style="top:246px;font-family:CR;font-size:54px;color:var(--gh);letter-spacing:5px;text-shadow:0 0 18px rgba(159,243,255,.85)">THE SÉANCE</div>
+ <div class="c" id="oS" style="top:322px;font-size:19px;font-weight:700">the ghosts of rugged coins snitch on their devs</div>
+ <svg id="oRing" class="abs" width="1080" height="560" style="left:0;top:360px;overflow:visible"></svg>
+ <div id="oBoo" class="abs" style="left:420px;top:420px;width:240px;height:316px"></div>
+ <div class="c" id="oStats" style="top:930px;font-size:19px;font-weight:800"><span class="r">8 serial ruggers caught</span> &nbsp;·&nbsp; 4 treats &nbsp;·&nbsp; <span class="g">+31.31 SOL</span></div>
+ <div class="c" id="oTri" style="top:972px;font-size:15px;font-weight:700"><span class="d">trilogy:</span> <span style="color:var(--or)">I +6.66</span> <span class="d">→</span> <span class="g">II +13.13</span> <span class="d">→</span> <span class="r">III +31.31</span> <span class="d">· 0 rugs held</span></div>
+ <div class="c" id="oHH" style="top:1030px;font-family:CR;font-size:64px;color:var(--gd);letter-spacing:4px;text-shadow:0 0 22px rgba(255,200,97,.8)">HAPPY HALLOWEEN</div>
+ <div class="c" id="oB" style="top:1128px;font-family:RB;font-weight:700;font-size:30px;color:var(--or);text-shadow:0 0 14px rgba(255,160,64,.6)">built by RUGIKK</div>
+ <div class="c d" id="oF" style="top:1174px;font-size:11px">trilogy complete · simulated run · not financial advice · @rgk_degen</div>
+ <svg id="oBats" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+</div>
+<div id="vig"></div>
+
+<script src="_shared.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function bez(p0,p1,p2,u){const a=1-u;return [a*a*p0[0]+2*a*u*p1[0]+u*u*p2[0],a*a*p0[1]+2*a*u*p1[1]+u*u*p2[1]]}
+const NO='trick',YES='treat';
+// ghosts = part II rugs
+const GH=['BANSHEE','CURSE','COFFIN','WRAITH','GOBLIN','VAMP','SHADE','GRAVE','NOX','HAUNT','SPOOKYY'].map((t,i)=>{const r=rng(70+i);
+ return {t,dev:'dev '+'123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'[Math.floor(r()*58)]+Math.floor(r()*36**3).toString(36)+'…'+Math.floor(r()*36**3).toString(36)}});
+const gi=t=>GH.findIndex(g=>g.t==t);
+const CASES=[
+ {t:'CASKET', v:NO, mc:'31K', ago:'12s',g:['COFFIN'],q:'same dev. he pulled my LP. now he\'s back.'},
+ {t:'PHANTOM',v:YES,mc:'144K',ago:'2m', pnl:6.66},
+ {t:'WAIL',   v:NO, mc:'27K', ago:'9s', g:['BANSHEE'],q:'that wallet set my sell fee to 99%.'},
+ {t:'JINX',   v:NO, mc:'44K', ago:'20s',g:['CURSE'],q:'his mint key is still warm.'},
+ {t:'LANTERN',v:YES,mc:'208K',ago:'4m', pnl:9.13},
+ {t:'SPECTER',v:NO, mc:'61K', ago:'31s',g:['SHADE','NOX'],q:'we both died to that proxy.'},
+ {t:'FANGS',  v:NO, mc:'38K', ago:'15s',g:['GRAVE'],q:'he held 34% of me. same bag.'},
+ {t:'RAVEN',  v:YES,mc:'176K',ago:'3m', pnl:5.21},
+ {t:'TOMB',   v:NO, mc:'52K', ago:'22s',g:['GOBLIN'],q:'23 bundle wallets. same funder.'},
+ {t:'BLOODY', v:NO, mc:'29K', ago:'8s', g:['VAMP'],q:'he froze my holders. don\'t.'},
+ {t:'HOLLOW', v:NO, mc:'47K', ago:'17s',g:['HAUNT','WRAITH'],q:'two rugs. one dev. three now.'},
+ {t:'MIDNIGHT',v:YES,mc:'333K',ago:'5m',pnl:10.31},
+];
+CASES.forEach((c,i)=>{const r=rng(800+i);c.dev=c.g?GH[gi(c.g[0])].dev:'dev '+Math.floor(r()*36**4).toString(36)+'…'+Math.floor(r()*36**3).toString(36);c.links=c.g?14+Math.floor(r()*120):0});
+const T0=1.2, CD=2.0, TEND=T0+CD*12, TOUT=25.8;
+// ---- board geometry (board coords 508x340) ----
+const BC=[254,300];const POS={};
+'ABCDEFGHIJKLM'.split('').forEach((ch,i)=>{const a=(200+i*(140/12))*Math.PI/180;POS[ch]=[BC[0]+212*Math.cos(a),BC[1]+212*Math.sin(a)+6]});
+'NOPQRSTUVWXYZ'.split('').forEach((ch,i)=>{const a=(204+i*(132/12))*Math.PI/180;POS[ch]=[BC[0]+146*Math.cos(a),BC[1]+146*Math.sin(a)+8]});
+'1234567890'.split('').forEach((ch,i)=>{POS[ch]=[110+i*32,262]});
+POS.YES=[70,46];POS.NO=[438,46];POS.BYE=[254,316];
+function boardSVG(t,hl){let s=`<defs><radialGradient id="wood" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#2a1018"/><stop offset=".7" stop-color="#160810"/><stop offset="1" stop-color="#0a0407"/></radialGradient>
+ <filter id="bg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <rect x="0" y="0" width="508" height="340" rx="26" fill="url(#wood)" stroke="#ffc861" stroke-width="2.5" filter="url(#bg)"/>
+ <rect x="10" y="10" width="488" height="320" rx="20" fill="none" stroke="#ff2d55" stroke-opacity=".5" stroke-width="1"/>`;
+ const lt=(k,txt,sz,col)=>{const p=POS[k];const on=hl==k;return `<text x="${p[0]}" y="${p[1]}" text-anchor="middle" dominant-baseline="middle" font-family="RB" font-weight="900" font-size="${on?sz*1.35:sz}" fill="${on?'#ffffff':col}" ${on?'filter="url(#bg)"':''} style="${on?'paint-order:stroke;stroke:#9ff3ff;stroke-width:1.2px':''}">${txt}</text>`};
+ for(const ch of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')s+=lt(ch,ch,25,'#ffd9a0');
+ for(const ch of '1234567890')s+=lt(ch,ch,17,'#c99a70');
+ s+=lt('YES','YES',26,'#7cff4f')+lt('NO','NO',26,'#ff2d55')+lt('BYE','GOODBYE',16,'#c99a70');
+ // sun & moon
+ s+=`<circle cx="70" cy="84" r="10" fill="none" stroke="#7cff4f" stroke-opacity=".6"/><path d="M432,76 a12,12 0 1,0 14,16 a9,9 0 1,1 -14,-16 z" fill="#ff2d55" opacity=".7"/>`;
+ s+=`<text x="254" y="56" text-anchor="middle" font-family="CR" font-size="22" fill="#9ff3ff" opacity=".75" letter-spacing="3">BOO · OUIJA</text>`;
+ return s}
+// planchette path per case
+function waypoints(k){const c=CASES[k];const prev=k>0?(CASES[k-1].v==NO?POS.NO:POS.YES):POS.BYE;
+ const L=c.t.split('').filter(ch=>POS[ch]);const w=[{u:0,p:prev,k:null}];
+ L.forEach((ch,i)=>w.push({u:.14+i*(.82/L.length),p:POS[ch],k:ch,i}));
+ w.push({u:1.08,p:c.v==NO?POS.NO:POS.YES,k:c.v==NO?'NO':'YES'});return {w,L}}
+function plan(k,u){const {w}=waypoints(k);let a=w[0],b=w[0];for(let i=0;i<w.length;i++){if(w[i].u<=u)a=w[i];if(w[i].u>u){b=w[i];break}}
+ if(a===b||u>=w[w.length-1].u)return {p:w[w.length-1].u<=u?w[w.length-1].p:a.p,hl:u>=w[w.length-1].u+.04?w[w.length-1].k:null,n:w.filter(x=>x.u<=u&&x.k&&x.i!==undefined).length};
+ const seg=(b.u-a.u),move=Math.min(seg*.62,.22);const f=clamp((u-a.u)/move);const p=[lerp(a.p[0],b.p[0],eio(f)),lerp(a.p[1],b.p[1],eio(f))];
+ return {p,hl:f>=1?a.k:null,n:w.filter(x=>x.u<=u&&x.k&&x.i!==undefined).length}}
+// web nodes (svg coords 254x530)
+const WC=[127,250];GH.forEach((g,i)=>{const a=-Math.PI/2+i/GH.length*Math.PI*2;g.n=[WC[0]+84*Math.cos(a),WC[1]+104*Math.sin(a)]});
+CASES.forEach((c,i)=>{if(c.g){const ps=c.g.map(x=>GH[gi(x)].n);const mx=ps.reduce((s,p)=>s+p[0],0)/ps.length,my=ps.reduce((s,p)=>s+p[1],0)/ps.length;
+  const dx=mx-WC[0],dy=my-WC[1],d=Math.hypot(dx,dy)||1;c.n=[WC[0]+dx/d*(ps.length>1?40:52),WC[1]+dy/d*(ps.length>1?40:52)]}
+ else{const j=CASES.filter((x,ii)=>!x.g&&ii<i).length;c.n=[40+j*58,470]}});
+// streams
+const SN=['0x9f3a','funder→dev','hop 2','bundle','sig ok','0xdead','dev hop','same funder','cluster 7','LP pull','mint key','spl-transfer','0x4b1d','proxy','snitch'];
+const LANES=[];{const r=rng(9);[156,382,732,782,906,1016,1292].forEach((y,i)=>{let s='';for(let k=0;k<30;k++)s+=SN[Math.floor(r()*SN.length)]+'  ·  ';LANES.push({y,dir:i%2?-1:1,sp:70+r()*120,s,ph:r()*2000,col:['#9ff3ff','#ffc861','#ff2d55'][i%3],op:.08+r()*.06})})}
+$('streams').innerHTML=LANES.map((l,i)=>`<div class="stream" id="ln${i}" style="top:${l.y}px;color:${l.col};opacity:${l.op}">${l.s+l.s}</div>`).join('');
+// ghost svg
+function ghostG(x,y,s,col,op,t,id){const w=Math.sin(t*6)*2;return `<g transform="translate(${x},${y}) scale(${s})" opacity="${op}">
+ <path d="M-14,8 C-14,-14 14,-14 14,8 L14,18 Q10,${14+w} 7,18 Q3.5,${22-w} 0,18 Q-3.5,${14+w} -7,18 Q-10,${22-w} -14,18 Z" fill="${col}" fill-opacity=".9" style="filter:drop-shadow(0 0 6px ${col})"/>
+ <ellipse cx="-5" cy="1" rx="2.6" ry="3.6" fill="#1a0610"/><ellipse cx="5" cy="1" rx="2.6" ry="3.6" fill="#1a0610"/><ellipse cx="0" cy="9" rx="2.4" ry="2.8" fill="#1a0610"/></g>`}
+// static: witness rows
+GH.forEach((g,i)=>{const d=document.createElement('div');d.className='wrow';d.id='w'+i;d.style.top=(32+i*47.5)+'px';
+ d.innerHTML=`<svg width="34" height="36" viewBox="-17 -16 34 36">${ghostG(0,0,1,'#9ff3ff',.85,0)}</svg><div class="nm">$${g.t}</div><div class="dv">${g.dev}</div><div class="tg"></div>`;$('wit').appendChild(d)});
+CASES.forEach((c,i)=>{const d=document.createElement('div');d.className='tile';d.id='tl'+i;d.style.left=(12+i*86)+'px';d.innerHTML=`<div class="tk">$${c.t}</div><div class="oc"></div>`;$('tiles').appendChild(d)});
+$('boo').innerHTML=catSVG('m');$('oBoo').innerHTML=catSVG('o');
+// log
+const LOG=[];{LOG.push({t:.1,s:'<span style="color:#ff7a1a">rgk@boominal</span>:~$ ./boo --seance --summon part2.graveyard'});
+ LOG.push({t:.5,s:'<span class="gh">=^.^= 11 spirits bound · candles lit · midnight in 30s</span>'});
+ const r=rng(13);let tt=.75;while(tt<TEND){const a=Math.floor(r()*36**5).toString(36),b=Math.floor(r()*36**3).toString(36);
+  LOG.push({t:tt,s:`<span class="d">trace ${a}…${b} → ${['funder','hop 1','hop 2','cex','bundle','fresh'][Math.floor(r()*6)].padEnd(7)} ${['ok','ok','seen','ok','new'][Math.floor(r()*5)]}</span>`});tt+=.12+r()*.1}
+ CASES.forEach((c,k)=>{const st=T0+k*CD;LOG.push({t:st+.02,s:`<span class="gd">[launch]</span> $${c.t} · ${c.dev} · mc ${c.mc}`});
+  if(c.g){LOG.push({t:st+.6,s:`<span class="gh">[spirit] $${c.g.join(' + $')}: "${c.q}"</span>`});LOG.push({t:st+1.1,s:`<span class="r">[board] NO · serial rugger · ${c.links} wallets linked</span>`})}
+  else{LOG.push({t:st+.6,s:`<span class="d">[spirit] … silence. no ghost knows this dev</span>`});LOG.push({t:st+1.1,s:`<span class="g">[board] YES · ape 0.5 SOL</span>`});LOG.push({t:st+1.55,s:`<span class="g">[act] tp ladder filled → +${c.pnl.toFixed(2)} SOL</span>`})}});
+ LOG.sort((a,b)=>a.t-b.t)}
+function pnlAt(t){let p=0;CASES.forEach((c,k)=>{if(c.v!=YES)return;p+=c.pnl*eo(clamp((t-(T0+k*CD+1.5))/.35))});return p}
+// cat
+function setCat(root,state,t){const col={idle:['#ffb020','#ff6a00'],sniff:['#bff8ff','#3fd8ff'],trick:['#ff4d4d','#c4002a'],treat:['#7cff4f','#2fb000']}[state];
+ root.style.setProperty('--ec',col[0]);root.style.setProperty('--ec2',col[1]);
+ const open=root.querySelector('.e-open'),happy=root.querySelector('.e-happy'),brow=root.querySelector('.e-brow');
+ happy.style.display=state=='treat'?'':'none';open.style.display=state=='treat'?'none':'';brow.style.display=state=='trick'?'':'none';
+ const bl=(t%2.9)<.1&&state=='idle';open.setAttribute('transform',`translate(0,134) scale(1,${bl?.1:1}) translate(0,-134)`);
+ root.querySelectorAll('.pup').forEach(p=>p.setAttribute('transform',`translate(${state=='sniff'?Math.sin(t*3)*4:Math.sin(t*1.3)*2},${state=='sniff'?3:0})`));
+ const id=root.querySelector('[id^=tail]').id.slice(4);root.querySelector('#tail'+id).setAttribute('transform',`rotate(${Math.sin(t*2.5)*7} 150 262)`);
+ root.querySelector('#head'+id).setAttribute('transform',`translate(0,${Math.sin(t*2)*2}) rotate(${Math.sin(t*1.2)*3} 110 160)`)}
+function candle(x,y,s,t,i){const f=Math.sin(t*13+i*2)*.15+Math.sin(t*29+i)*.08;return `<g transform="translate(${x},${y}) scale(${s})">
+ <ellipse cx="0" cy="-34" rx="${26+f*20}" ry="${30+f*20}" fill="#ffc861" opacity=".12"/>
+ <rect x="-7" y="-14" width="14" height="40" rx="3" fill="#efe1cf"/><path d="M-7,-12 q3,8 0,14" stroke="#c9b49c" fill="none"/>
+ <path d="M0,-16 Q${-6-f*8},-28 ${f*6},${-40-f*10} Q${6-f*8},-28 0,-16 Z" fill="#ffc861" style="filter:drop-shadow(0 0 8px #ff9a2e)"/>
+ <path d="M0,-17 Q-2.5,-24 ${f*3},-30 Q2.5,-24 0,-17 Z" fill="#fff6d0"/></g>`}
+
+// ---- render ----
+function render(t){
+ const boot=t<T0;const k=boot?-1:Math.min(11,Math.floor((t-T0)/CD));const u=boot?0:t-T0-k*CD;const c=k>=0?CASES[k]:null;
+ const done=i=>i<k||(i==k&&u>=1.1);
+ LANES.forEach((l,i)=>{const e=$('ln'+i);const w=2200;const x=((t*l.sp+l.ph)%w);e.style.transform=`translateX(${l.dir>0?x-w:-x}px)`});
+ // clock to midnight at TOUT
+ const secs=Math.max(0,30-t*(30/TOUT));const cs=Math.floor(secs+.999);$('clock').textContent=cs>0?`23:59:${String(60-cs).padStart(2,'0')}`:'00:00:00';
+ $('clockS').textContent=cs>0?`oct 31 · ${cs}s to midnight`:'midnight';
+ // kpis
+ const summoned=CASES.reduce((s,x,i)=>s+(x.g&&(i<k||(i==k&&u>=.45))?x.g.length:0),0);$('k1').textContent=summoned;
+ const caught=CASES.filter((x,i)=>x.v==NO&&done(i)).length,tre=CASES.filter((x,i)=>x.v==YES&&done(i)).length;$('k2').textContent=caught;$('k2s').textContent=`${caught} devs back with a new coin`;
+ const links=CASES.reduce((s,x,i)=>s+(x.g&&done(i)?x.links:0),0)+Math.floor(t*12);$('k3').textContent=fmt(links);
+ const pnl=pnlAt(t);$('k4').textContent='+'+pnl.toFixed(2);$('k4s').textContent=`${tre} treats · 0 rugs held`;$('pnlTag').textContent='III +'+pnl.toFixed(2)+' SOL';
+ $('pnlCard').style.boxShadow=c&&c.v==YES&&u>1.45&&u<1.75?'0 0 0 1px #7cff4f,0 0 30px rgba(124,255,79,.6)':'none';
+ // launch line
+ $('launch').innerHTML=c?`<span class="gd" style="font-weight:800">NEW LAUNCH ${String(k+1).padStart(2,'0')}/12</span> &nbsp;<span style="font-size:15px;font-weight:800">$${c.t}</span> &nbsp;<span class="d">${c.dev} · mc ${c.mc} · ${c.ago} old</span>`:`<span class="d">lighting candles${'...'.slice(0,1+Math.floor(t*3)%3)}</span>`;
+ // planchette
+ let P=POS.BYE,hl=null,n=0;if(c){const q=plan(k,u);P=q.p;hl=q.hl;n=q.n}
+ $('board').innerHTML=boardSVG(t,hl);
+ const wob=[Math.sin(t*7)*1.5,Math.cos(t*6)*1.5];const px=P[0]+wob[0],py=P[1]+wob[1]+26;
+ const lensCol=hl=='NO'?'#ff2d55':hl=='YES'?'#7cff4f':'#9ff3ff';
+ $('plan').innerHTML=`<g transform="translate(${px},${py})"><path d="M0,-60 C30,-56 44,-14 40,10 C36,30 -36,30 -40,10 C-44,-14 -30,-56 0,-60 Z" fill="#1c0b12" fill-opacity=".9" stroke="#ffc861" stroke-width="2.5" style="filter:drop-shadow(0 0 10px rgba(255,200,97,.6))"/>
+  <circle cx="0" cy="-26" r="15" fill="${lensCol}" fill-opacity=".22" stroke="${lensCol}" stroke-width="2.5" style="filter:drop-shadow(0 0 10px ${lensCol})"/>
+  ${hl?`<text x="0" y="-25" text-anchor="middle" dominant-baseline="middle" font-family="RB" font-weight="900" font-size="${hl.length>1?12:19}" fill="#fff" style="filter:drop-shadow(0 0 6px ${lensCol})">${hl}</text>`:''}<ellipse cx="0" cy="12" rx="17" ry="10" fill="#07050a" stroke="#ff7a1a" stroke-width="2.5"/><g fill="#ff7a1a"><circle cx="-8" cy="6" r="2"/><circle cx="0" cy="3" r="2"/><circle cx="8" cy="6" r="2"/></g></g>`;
+ // candles
+ $('candles').innerHTML=candle(298,394,1,t,0)+candle(782,394,1,t,1)+candle(310,712,.8,t,2)+candle(770,712,.8,t,3);
+ // transcript
+ const sp=c?c.t.split('').filter(ch=>POS[ch]):[];
+ if(c){let s='$'+sp.slice(0,n).join('');const cur=Math.floor(t*3)%2?'_':' ';if(u>=1.12)s+=` <span style="color:${c.v==NO?'#ff2d55':'#7cff4f'};text-shadow:0 0 16px ${c.v==NO?'#ff2d55':'#7cff4f'}">${c.v==NO?'NO':'YES'}</span>`;else s+=cur;$('spell').innerHTML=s}
+ else $('spell').innerHTML='<span class="d">· · ·</span>';
+ let wh='',tr='the board is quiet';
+ if(c){if(u<.45){wh=`<span class="d">summoning the graveyard… is anyone here who knows <b style="color:#fff">${c.dev}</b>?</span>`;tr='summoning'}
+  else if(c.g){const a=clamp((u-.45)/.5);const full=`"${c.q}"`;wh=`<span class="gh" style="font-weight:800">👻 $${c.g.join(' + $')}</span><br><span style="font-style:italic;color:#e9fbff">${full.slice(0,Math.floor(full.length*a))}</span>`;tr='<span class="r">a spirit answered</span>'}
+  else{wh=`<span class="d" style="font-style:italic">… silence. no spirit knows this dev.<br><span class="g">fresh wallet · clean funder · LP burned</span></span>`;tr='<span class="g">no ghosts</span>'}}
+ $('whisper').innerHTML=wh.replace('👻 ','');$('trTag').innerHTML=tr;
+ // banner
+ const bn=$('banner');if(c&&u>=1.1){const a=eo(clamp((u-1.1)/.12));bn.style.opacity=a*(1-clamp((u-1.9)/.1));bn.style.transform=`scale(${lerp(1.35,1,a)})`;
+  if(c.v==NO){bn.innerHTML=`NO · dev rugged $${c.g.join(' + $')}`;bn.style.color='#ff6d8a';bn.style.border='2px solid #ff2d55';bn.style.background='rgba(40,4,14,.92)';bn.style.boxShadow='0 0 26px rgba(255,45,85,.6)'}
+  else{bn.innerHTML=`YES · +${c.pnl.toFixed(2)} SOL`;bn.style.color='#7cff4f';bn.style.border='2px solid #7cff4f';bn.style.background='rgba(6,30,10,.92)';bn.style.boxShadow='0 0 26px rgba(124,255,79,.6)'}}else bn.style.opacity=0;
+ // cat + bubble
+ let st='idle',bt='',bc='#ffc861';if(c){if(u<.4)bt='who knows this dev?';else if(u<1.1){st='sniff';bt=c.g?'...i hear them.':'...silence?'}else{st=c.v==NO?'trick':'treat';bt=c.v==NO?'he\'s back. NO.':'clean. YES.';bc=c.v==NO?'#ff2d55':'#7cff4f'}}
+ else bt=t>.5?'is anyone here?':'';
+ setCat($('boo').querySelector('svg'),st,t);
+ const b=$('bubble');b.style.display=bt?'':'none';b.textContent=bt;b.style.borderColor=bc;b.style.color=bc;b.style.boxShadow=`0 0 12px ${bc}`;
+ // witnesses
+ GH.forEach((g,i)=>{const e=$('w'+i);const active=c&&c.g&&c.g.includes(g.t)&&u>=.3&&u<1.9;const used=CASES.some((x,j)=>x.g&&x.g.includes(g.t)&&done(j));
+  e.className='wrow'+(active?' on':used?' used':'');const tg=e.querySelector('.tg');
+  if(active){tg.textContent='SPEAKING';tg.style.cssText='color:#0b0508;background:#9ff3ff'}else if(used){tg.textContent='SNITCHED';tg.style.cssText='color:#ff5a78;border:1px solid #ff2d55'}else{tg.textContent='bound';tg.style.cssText='color:#5e3a44;border:1px solid #3a1622'}
+  e.querySelector('svg').style.transform=`translateY(${Math.sin(t*2+i)*2}px)`});
+ // flying ghosts: witness → board → web
+ let fl='';if(c&&c.g){c.g.forEach((gt,j)=>{const g=GH[gi(gt)];const from=[16+28,162+32+gi(gt)*47.5+22];const atB=[350+j*44,318+j*34];const web=[810+g.n[0],162+28+g.n[1]];
+   let p=null,s=1.2,op=1;const u1=clamp((u-.3)/.35),u2=clamp((u-1.15)/.45);
+   if(u>=.3&&u<.65)p=bez(from,[200,250],atB,eio(u1));else if(u>=.65&&u<1.15)p=[atB[0]+Math.sin(t*3+j)*6,atB[1]+Math.cos(t*2.4+j)*5];
+   else if(u>=1.15&&u<1.6){p=bez(atB,[700,260],web,eio(u2));s=lerp(1.2,.6,u2);op=1-u2*.4}
+   if(p)fl+=ghostG(p[0],p[1],s*1.6,'#9ff3ff',op,t);
+   if(u>=.65&&u<1.15&&j==0)fl+=`<text x="${atB[0]-10}" y="${atB[1]-30}" text-anchor="middle" font-family="JB" font-weight="800" font-size="12" fill="#9ff3ff" style="filter:drop-shadow(0 0 6px #9ff3ff)">"I know him."</text>`})}
+ // treat coins
+ if(c&&c.v==YES&&u>1.15&&u<1.55){const uu=clamp((u-1.15)/.4);for(let s=0;s<12;s++){const r=rng(k*30+s);const q=bez([286+P[0],384+P[1]],[600+r()*200,180+r()*160],[938,108],clamp(eio(uu)-s*.025));
+  fl+=`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="#7cff4f" style="filter:drop-shadow(0 0 6px #7cff4f)"/>`}}
+ $('fly').innerHTML=fl;
+ // web
+ let w='';let edges=0;
+ for(let i=0;i<GH.length;i++)for(let j=i+1;j<GH.length;j++){if((i*7+j*3)%5)continue;w+=`<line x1="${GH[i].n[0]}" y1="${GH[i].n[1]}" x2="${GH[j].n[0]}" y2="${GH[j].n[1]}" stroke="#5e3a44" stroke-width=".6" opacity=".6"/>`}
+ CASES.forEach((x,i)=>{const appear=i<k||(i==k&&u>=.2);if(!appear)return;const ea=i<k?1:clamp((u-1.3)/.3);
+  if(x.g){x.g.forEach((gt,j)=>{const g=GH[gi(gt)].n;if(ea<=0)return;edges++;const ex=lerp(x.n[0],g[0],ea),ey=lerp(x.n[1],g[1],ea);
+    w+=`<line x1="${x.n[0]}" y1="${x.n[1]}" x2="${ex}" y2="${ey}" stroke="#ff2d55" stroke-width="1.6" style="filter:drop-shadow(0 0 4px #ff2d55)"/>`;
+    if(ea>=1){for(let d=0;d<2;d++){const f=(Math.sin(t*2.2+i+d*3)+1)/2;w+=`<text x="${lerp(x.n[0],g[0],f)}" y="${lerp(x.n[1],g[1],f)}" font-size="7.5" font-family="JB" font-weight="700" fill="#ffc861">${d?'0x':'$'}</text>`}}})}
+  const col=x.v==NO?'#ff2d55':'#7cff4f';const rr=i==k?6+Math.sin(t*10)*1.5:4.5;
+  w+=`<circle cx="${x.n[0]}" cy="${x.n[1]}" r="${rr}" fill="${col}" style="filter:drop-shadow(0 0 6px ${col})"/>`;
+  if(i==k||!x.g)w+=`<text x="${x.n[0]}" y="${x.n[1]+(x.g?-10:16)}" text-anchor="middle" font-size="8.5" font-family="JB" font-weight="800" fill="${col}">$${x.t}</text>`});
+ GH.forEach((g,i)=>{const lit=c&&c.g&&c.g.includes(g.t)&&u>.3&&u<1.9;w+=ghostG(g.n[0],g.n[1],.62,lit?'#9ff3ff':'#6c8f96',lit?1:.7,t+i)+
+  `<text x="${g.n[0]}" y="${g.n[1]+19}" text-anchor="middle" font-size="7.5" font-family="JB" fill="${lit?'#9ff3ff':'#7a5a63'}">${g.t}</text>`});
+ w+=`<text x="127" y="440" text-anchor="middle" font-size="8.5" font-family="JB" fill="#5e3a44">─ fresh devs · no history ─</text>`;
+ $('web').innerHTML=w;$('webTag').textContent=edges+' rug edges';
+ // tiles
+ CASES.forEach((x,i)=>{const e=$('tl'+i);const dn=done(i);e.className='tile'+(i==k&&!dn?' cur':dn?(x.v==NO?' no':' yes'):'');e.querySelector('.oc').textContent=dn?(x.v==NO?'NO · '+x.g.length+' ghost'+(x.g.length>1?'s':''):'YES +'+x.pnl.toFixed(2)):(i==k?'summoning…':'')});
+ $('tileTag').innerHTML=`<span class="r">${caught} NO</span> · <span class="g">${tre} YES</span>`;
+ // chart: trilogy (I and II baseline, III growing)
+ const W=500,H=210,mx=34;let grid='';for(let g=0;g<=4;g++){const y=H-8-(g*8)/mx*(H-20);grid+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="#3a1622"/><text x="${W-2}" y="${y-3}" text-anchor="end" font-size="8.5" font-family="JB" fill="#5e3a44">${g*8}</text>`}
+ const Y=v=>H-8-v/mx*(H-20);
+ grid+=`<line x1="0" x2="${W}" y1="${Y(6.66)}" y2="${Y(6.66)}" stroke="#ff7a1a" stroke-dasharray="4 4" opacity=".6"/><text x="4" y="${Y(6.66)-4}" font-size="9" font-family="JB" fill="#ff7a1a">part I +6.66</text>`;
+ grid+=`<line x1="0" x2="${W}" y1="${Y(13.13)}" y2="${Y(13.13)}" stroke="#7cff4f" stroke-dasharray="4 4" opacity=".5"/><text x="4" y="${Y(13.13)-4}" font-size="9" font-family="JB" fill="#7cff4f">part II +13.13</text>`;
+ let d='';const N=120;for(let i=0;i<=N;i++){const tt=i/N*TEND;if(tt>t)break;const v=pnlAt(tt)+Math.sin(tt*3.3)*.3+Math.sin(tt*8.1)*.12;d+=(i?'L':'M')+(i/N*W).toFixed(1)+','+Y(v).toFixed(1)}
+ const last=d?d.split(/[ML]/).pop().split(','):null;
+ $('chart').innerHTML=grid+(d?`<path d="${d} L${last[0]},${H-8} L0,${H-8} Z" fill="rgba(255,45,85,.08)"/><path d="${d}" fill="none" stroke="#ff2d55" stroke-width="2.4" style="filter:drop-shadow(0 0 5px #ff2d55)"/><circle cx="${last[0]}" cy="${last[1]}" r="4.5" fill="#fff" style="filter:drop-shadow(0 0 6px #ff2d55)"/><text x="${+last[0]+8}" y="${+last[1]-8}" font-size="10" font-family="JB" font-weight="800" fill="#ff6d8a">III</text>`:'');
+ // log
+ $('log').innerHTML=LOG.filter(e=>e.t<=t).slice(-16).map(e=>e.s).join('\n');$('lps').textContent=Math.round(8+Math.abs(Math.sin(t*2))*6)+' l/s';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ // flash/shake
+ let fl2=0,fc='255,45,85',sx=0,sy=0;if(c&&c.v==NO&&u>1.08&&u<1.35){const a=1-(u-1.08)/.27;fl2=.18*a;sx=Math.sin(t*90)*7*a;sy=Math.cos(t*70)*5*a}
+ if(c&&c.v==YES&&u>1.5&&u<1.7){fl2=.12*(1-(u-1.5)/.2);fc='124,255,79'}
+ if(c&&c.g&&u>.62&&u<.75){fl2=Math.max(fl2,.1);fc='159,243,255'}
+ $('flash').style.opacity=fl2;$('flash').style.background=`radial-gradient(circle at 50% 45%,rgba(${fc},0),rgba(${fc},.9))`;
+ // decor
+ let dec=web(1080,150,-1,1,36,.18)+web(16,1010,1,-1,40,.18)+web(1064,1286,-1,-1,40,.16)+web(16,150,1,1,30,.14);
+ [[2.6,4.6,170,1],[9,4.8,770,-1],[15,4.2,240,-1],[20.5,4.4,900,1]].forEach(([t0,du,y,dir],i)=>{const uu=(t-t0)/du;if(uu<0||uu>1)return;dec+=batG(dir>0?lerp(-40,1120,uu):lerp(1120,-40,uu),y+Math.sin(uu*9+i)*24,1.5,t*14+i,1)});
+ $('decor').innerHTML=dec;
+ const o=clamp((t-TOUT)/.45);$('outro').style.opacity=o;const app=$('app');
+ app.style.filter=o>0?`blur(${6*o}px) brightness(${1-.72*o})`:'none';app.style.transform=`translate(${sx}px,${sy}px)`;
+ if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){
+ // midnight strike flash
+ const f=s<.35?1-s/.35:0;$('flash').style.opacity=Math.max(+$('flash').style.opacity,f*.5);$('flash').style.background='radial-gradient(circle at 50% 40%,rgba(255,240,200,.9),rgba(255,45,85,.6))';
+ const a=eo(clamp(s/.6));$('oT').style.transform=`scale(${lerp(.6,1,a)})`;$('oT').style.opacity=a;$('oClock').style.opacity=a;
+ [['oH',.25],['oS',.45],['oStats',.8],['oTri',.95],['oHH',1.15],['oB',1.35],['oF',1.45]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`});
+ $('oHH').style.transform+=` scale(${1+Math.sin(s*4)*.02})`;
+ const ca=eo(clamp((s-.2)/.6));$('oBoo').style.opacity=ca;$('oBoo').style.transform=`translateY(${(1-ca)*60+Math.sin(s*3)*3}px)`;
+ setCat($('oBoo').querySelector('svg'),s<1.8?'treat':'trick',t);
+ // ring of 11 ghosts orbiting Boo
+ let g='';GH.forEach((x,i)=>{const ang=i/GH.length*Math.PI*2+s*.9;const rr=lerp(40,250,eo(clamp((s-.3)/1)));const cx=540+Math.cos(ang)*rr*1.45,cy=230+Math.sin(ang)*rr*.62;
+  g+=ghostG(cx,cy,1.5,'#9ff3ff',ca*.9,t+i)+`<text x="${cx}" y="${cy+40}" text-anchor="middle" font-size="10" font-family="JB" font-weight="800" fill="#9ff3ff" opacity="${ca*.8}">$${x.t}</text>`});
+ $('oRing').innerHTML=g;
+ $('oBg').innerHTML=`<defs><radialGradient id="ob" cx="50%" cy="42%" r="55%"><stop offset="0" stop-color="#ff2d55" stop-opacity=".22"/><stop offset=".6" stop-color="#3a0a1c" stop-opacity=".15"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="1080" height="1350" fill="url(#ob)"/>
+  <circle cx="540" cy="560" r="${230+Math.sin(s*2)*4}" fill="#ff4a6a" opacity=".12"/>`+web(1080,0,-1,1,150,.25)+web(0,0,1,1,120,.22)+web(0,1350,1,-1,110,.18)+web(1080,1350,-1,-1,130,.2);
+ let h='';for(let i=0;i<10;i++){const r=rng(300+i);const d=.15+r()*.6;const uu=clamp((s-d)/2.6);if(uu<=0)continue;const ang=-Math.PI/2+(r()-.5)*2.8;const dist=eo(uu)*(380+r()*360);
+  h+=batG(540+Math.cos(ang)*dist*1.3,600+Math.sin(ang)*dist*.9,1.4+r()*1.5,s*15+i,1)}$('oBats').innerHTML=h;
+}
+window.render=render;
+document.fonts.ready.then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>

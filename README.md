@@ -94,6 +94,17 @@ Sample output:
   8 tricks swiped · 4 treats · spent 2.0/5 SOL · lives 9/9
 ```
 
+## The saga
+
+| File | Episode | Run |
+|---|---|---|
+| `terminal/index.html` | **I · Halloween Edition**: SCAN → ASK → CAT → GATE → ACT | +6.66 SOL |
+| `terminal/part2.html` | **II · The Cauldron**: Boo decompiles contract bytecode, buries 11 rugs | +13.13 SOL |
+| `terminal/part3.html` | **III · The Séance**: ghosts of buried rugs snitch on their devs' new launches | +31.31 SOL |
+| `terminal/rider.html` | **BOO RIDER**: arcade run, catch pumps, jump rugs, paint the chart | +21.37 SOL |
+
+Export any episode: `node scripts/render.js out.mp4 [audio] part2.html`
+
 ## Repo layout
 
 ```

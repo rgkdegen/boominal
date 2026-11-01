@@ -1,0 +1,351 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>BOOMINAL II · The Cauldron</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:CR;src:url(../assets/fonts/creepster-latin-400-normal.woff2)}
+:root{--bg:#040806;--pan:rgba(8,16,11,.86);--bd:#173323;--bd2:#24503a;--tx:#dff5e4;--dim:#5f8a6d;--dim2:#3a5a46;
+ --gr:#7cff4f;--gr2:#3cff9e;--pu:#b07cff;--or:#ff7a1a;--rd:#ff3b5c;--yl:#ffd34d}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:JB,monospace;color:var(--tx);font-size:12px}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(520px 420px at 540px 640px,rgba(124,255,79,.13),transparent 70%),
+ radial-gradient(800px 500px at 100% 0%,rgba(176,124,255,.12),transparent 70%),
+ radial-gradient(800px 600px at 0% 100%,rgba(60,255,158,.06),transparent 70%),var(--bg)}
+#app::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(124,255,79,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(124,255,79,.025) 1px,transparent 1px);background-size:20px 20px}
+#scan{position:absolute;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+#flash{position:absolute;inset:0;z-index:89;pointer-events:none;opacity:0}
+.abs{position:absolute}
+.panel{position:absolute;background:var(--pan);border:1px solid var(--bd);border-radius:8px}
+.ph{position:absolute;left:12px;top:9px;font-size:11px;font-weight:800;letter-spacing:.6px}
+.pt{position:absolute;right:12px;top:9px;font-size:10px}
+.g{color:var(--gr)}.r{color:#ff5a74}.p{color:#c9a4ff}.o{color:#ffa040}.d{color:var(--dim)}.y{color:var(--yl)}
+/* header */
+#title{left:16px;top:8px;font-family:RB;font-weight:900;font-size:32px;color:var(--or);text-shadow:0 0 14px rgba(255,122,26,.6)}
+#title b{color:var(--gr);text-shadow:0 0 14px rgba(124,255,79,.8);margin-left:6px}
+#pill{left:250px;top:15px;font-family:CR;font-size:18px;color:var(--pu);padding:1px 10px 0;border:1px solid rgba(176,124,255,.5);border-radius:6px;background:rgba(176,124,255,.08);text-shadow:0 0 8px rgba(176,124,255,.7);letter-spacing:1.5px}
+#sub{left:420px;top:21px;font-size:12px;font-weight:700;letter-spacing:.4px}
+#bps{left:690px;top:22px;font-size:10.5px;color:var(--gr)}
+#built{right:16px;top:20px;font-size:13px;font-weight:700;color:var(--or)}
+.kpi .h{position:absolute;left:12px;top:9px;font-size:10.5px;font-weight:700;letter-spacing:.4px}
+.kpi .big{position:absolute;left:11px;top:25px;font-size:36px;font-weight:800;letter-spacing:-1px}
+.kpi .s{position:absolute;left:12px;bottom:8px;font-size:9.5px;color:var(--dim)}
+/* code */
+.hex{position:absolute;left:10px;right:8px;top:30px;bottom:10px;overflow:hidden;font-size:10.5px;line-height:15px;white-space:pre;color:#2f7a4a}
+.hex .hl{color:#d6ffd0;background:rgba(124,255,79,.16);text-shadow:0 0 6px var(--gr)}
+.hex .bad{color:#ffd0d8;background:rgba(255,59,92,.22);text-shadow:0 0 6px var(--rd)}
+.dec{position:absolute;left:10px;right:8px;top:32px;font-size:11px;line-height:21px;white-space:pre}
+.dec .ln{color:var(--dim2);display:inline-block;width:22px}
+.dec .bad{color:#ff6d86;background:rgba(255,59,92,.14);text-shadow:0 0 6px rgba(255,59,92,.6)}
+.dec .ok{color:#9dffb0}
+.chip{position:absolute;z-index:30;padding:3px 7px;border-radius:5px;border:1px solid var(--gr);background:rgba(6,24,12,.92);color:#d6ffd0;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 0 10px rgba(124,255,79,.55)}
+.chip.p{border-color:var(--pu);color:#e6d4ff;box-shadow:0 0 10px rgba(176,124,255,.6)}
+.chip.big{font-size:14px;padding:5px 10px;border-width:2px}
+.chip.rd{border-color:var(--rd);color:#ffd6dd;box-shadow:0 0 14px rgba(255,59,92,.8);background:rgba(40,4,12,.92)}
+.chip.gn{border-color:var(--gr);color:#eaffde;box-shadow:0 0 14px rgba(124,255,79,.9)}
+#verdict{left:308px;top:296px;width:464px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;letter-spacing:2px;z-index:25}
+.tomb{position:absolute;width:84px;height:96px;bottom:6px;text-align:center}
+.tomb svg{position:absolute;left:0;top:0}
+.tomb .tt{position:absolute;left:0;right:0;top:30px;font-size:9.5px;font-weight:800;color:#e8e0f0}
+.tomb .tw{position:absolute;left:4px;right:4px;top:46px;font-size:7.5px;color:#ff8a9c;line-height:9px}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.2px;white-space:pre}
+.stream{position:absolute;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:1px;z-index:1}
+/* outro */
+#outro{position:absolute;inset:0;z-index:80;opacity:0}
+#outro .c{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div id="streams"></div>
+ <div id="title" class="abs">BOOMINAL<b>II</b></div>
+ <div id="pill" class="abs">THE CAULDRON</div>
+ <div id="sub" class="abs">/ CONTRACT DECOMPILER</div>
+ <div id="bps" class="abs">● 0 B/s</div>
+ <div id="built" class="abs">built by RUGIKK</div>
+
+ <div class="panel kpi" style="left:16px;top:56px;width:254px;height:94px"><div class="h">CONTRACTS DECOMPILED</div><div class="big" id="k1">0</div><div class="s">pump.fun · bytecode → pseudo</div></div>
+ <div class="panel kpi" style="left:282px;top:56px;width:254px;height:94px"><div class="h">RUGS BURIED ALIVE</div><div class="big r" id="k2" style="text-shadow:0 0 12px rgba(255,59,92,.5)">0</div><div class="s" id="k2s">0 / 16 on the table</div></div>
+ <div class="panel kpi" style="left:548px;top:56px;width:254px;height:94px"><div class="h">TIME TO VERDICT</div><div class="big" id="k3">~0<span style="font-size:13px;color:var(--dim);margin-left:6px;letter-spacing:0">ms</span></div><div class="s">no generation · one stir</div></div>
+ <div class="panel kpi" style="left:814px;top:56px;width:250px;height:94px" id="pnlCard"><div class="h">SESSION PNL</div><div class="pt g">SOL</div><div class="big g" id="k4" style="text-shadow:0 0 16px rgba(124,255,79,.55)">+0.00</div><div class="s" id="k4s">0 treats · 0 rugs held</div></div>
+
+ <!-- left bytecode -->
+ <div class="panel" style="left:16px;top:162px;width:280px;height:704px;overflow:hidden">
+  <div class="ph g">BYTECODE IN</div><div class="pt d" id="hexTag">0x0000</div>
+  <div class="hex" id="hex"></div>
+ </div>
+ <!-- right decompiler -->
+ <div class="panel" style="left:784px;top:162px;width:280px;height:704px;overflow:hidden">
+  <div class="ph p">BOO DECOMPILER</div><div class="pt d" id="decTag">idle</div>
+  <div class="dec" id="dec"></div>
+  <div class="abs" style="left:12px;right:12px;top:420px;height:1px;background:var(--bd2)"></div>
+  <div class="abs p" style="left:12px;top:430px;font-size:10.5px;font-weight:800;letter-spacing:.5px">RUG SIGNATURES</div>
+  <div class="abs" id="sigs" style="left:12px;right:12px;top:452px;font-size:10px;line-height:19px"></div>
+ </div>
+
+ <!-- center -->
+ <div class="abs" style="left:308px;top:166px;width:464px;font-size:10.5px;color:var(--dim)">
+  <span id="casePill" style="display:inline-block;padding:4px 10px;border:1px solid var(--gr);border-radius:5px;color:var(--gr);font-weight:800;background:rgba(124,255,79,.1)">BREWING...</span>
+ </div>
+ <div id="ticker" class="abs" style="left:308px;top:196px;width:464px;font-size:38px;font-weight:800;letter-spacing:-1px">$????</div>
+ <div id="tmeta" class="abs d" style="left:310px;top:244px;font-size:11px">pump.fun · stirring the pot</div>
+ <div id="addr" class="abs" style="left:310px;top:264px;font-size:10px;color:var(--dim2)">0x0000…0000</div>
+ <div id="verdict" class="abs"></div>
+ <div id="moon" class="abs" style="left:395px;top:340px;width:290px;height:290px;border-radius:50%;background:radial-gradient(circle at 45% 42%,rgba(210,255,200,.16),rgba(124,255,79,.07) 55%,rgba(0,0,0,0) 72%)"></div>
+ <svg id="steam" class="abs" width="464" height="320" style="left:308px;top:330px;z-index:6;overflow:visible"></svg>
+ <div id="boo" class="abs" style="left:432px;top:386px;width:216px;height:284px;z-index:7"></div>
+ <svg id="ladle" class="abs" width="464" height="500" style="left:308px;top:330px;z-index:9;overflow:visible"></svg>
+ <svg id="pot" class="abs" width="464" height="260" style="left:308px;top:610px;z-index:10;overflow:visible"></svg>
+ <div id="bubble" class="abs" style="left:640px;top:392px;z-index:12;padding:4px 10px;border:1.5px solid var(--yl);border-radius:7px;font-size:14px;font-weight:800;background:rgba(10,14,6,.88);white-space:nowrap"></div>
+ <div id="chips"></div>
+
+ <!-- graveyard -->
+ <div class="panel" style="left:16px;top:878px;width:1048px;height:132px;overflow:hidden" id="yard">
+  <div class="ph" style="color:#d8c8f0">⚰ GRAVEYARD <span class="d" style="font-weight:400">· rugs Boo buried tonight</span></div><div class="pt r" id="ripTag">0 RIP</div>
+  <div class="abs" style="left:0;right:0;bottom:0;height:22px;background:linear-gradient(0deg,rgba(176,124,255,.18),transparent)"></div>
+  <div id="tombs"></div>
+ </div>
+ <!-- bottom -->
+ <div class="panel" style="left:16px;top:1022px;width:520px;height:264px">
+  <div class="ph g">PNL · POT VALUE</div><div class="pt g" id="pnlTag">+0.00 SOL</div>
+  <svg id="chart" class="abs" style="left:10px;top:34px" width="500" height="220"></svg>
+ </div>
+ <div class="panel" style="left:548px;top:1022px;width:516px;height:264px">
+  <div class="ph o">boominal.sh <span class="d" style="font-weight:400">· part II</span></div><div class="pt g" id="lps">0 l/s</div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--gr),var(--pu),var(--or));box-shadow:0 0 8px var(--gr)"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">BYTES IN · BOO STIRS · RUGS BURIED · TREATS BAGGED</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">part II · simulated run · metrics illustrative · @rgk_degen</div>
+ <svg id="decor" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:40;pointer-events:none"></svg>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oBg" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div id="oStreams"></div>
+ <div class="c" id="oT" style="top:96px;font-family:RB;font-weight:900;font-size:120px;color:var(--or);text-shadow:0 0 30px rgba(255,122,26,.8)">BOOMINAL<span style="color:var(--gr);text-shadow:0 0 30px rgba(124,255,79,.9);margin-left:14px">II</span></div>
+ <div class="c" id="oH" style="top:240px;font-family:CR;font-size:54px;color:var(--pu);letter-spacing:5px;text-shadow:0 0 18px rgba(176,124,255,.85)">THE CAULDRON</div>
+ <div class="c" id="oS" style="top:318px;font-size:19px;font-weight:700">Boo decompiles every pump.fun contract before I ape</div>
+ <div id="oBoo" class="abs" style="left:398px;top:380px;width:284px;height:374px"></div>
+ <svg id="oPot" class="abs" width="464" height="260" style="left:308px;top:690px;overflow:visible"></svg>
+ <div id="oBub" class="abs" style="left:700px;top:420px;padding:5px 12px;border:1.5px solid var(--yl);border-radius:8px;color:var(--yl);font-size:17px;font-weight:800;box-shadow:0 0 12px rgba(255,211,77,.4)">part III?</div>
+ <div class="c" id="oStats" style="top:972px;font-size:19px;font-weight:800">48,812 contracts &nbsp;·&nbsp; <span class="r">11 rugs buried</span> &nbsp;·&nbsp; <span class="g">+13.13 SOL</span></div>
+ <div class="c d" id="oFlow" style="top:1014px;font-size:12px">BYTECODE → DECOMPILE → STIR → BURY / BAG &nbsp;·&nbsp; 0 rugs held</div>
+ <div id="oTombs" class="abs" style="left:0;top:1046px;width:1080px;height:100px"></div>
+ <div class="c" id="oB" style="top:1160px;font-family:RB;font-weight:700;font-size:30px;color:var(--or);text-shadow:0 0 14px rgba(255,160,64,.6)">built by RUGIKK</div>
+ <div class="c d" id="oF" style="top:1206px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+ <svg id="oBats" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+</div>
+<div id="scan"></div>
+
+<script src="_shared.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const T='trick',R='treat';
+// 16 cases
+const CASES=[
+ {t:'BANSHEE',v:T,mc:'94K', age:'3m', bad:[4],why:'sell fee 99%',     sig:'honeypot',  line:'fee.sell: 99%  // honeypot',sc:.07},
+ {t:'POTION', v:R,mc:'212K',age:'12m',pnl:2.10,sc:.92},
+ {t:'CURSE',  v:T,mc:'61K', age:'2m', bad:[1],why:'mint authority live',sig:'mint live', line:'mint_authority: Some(dev)',sc:.11},
+ {t:'COFFIN', v:T,mc:'138K',age:'6m', bad:[3],why:'LP pull fn',        sig:'LP pull',   line:'fn pull() -> lp.remove(owner)',sc:.04},
+ {t:'WRAITH', v:T,mc:'47K', age:'1m', bad:[6],why:'blacklist(holder)', sig:'blacklist', line:'fn blacklist(holder) -> true',sc:.09},
+ {t:'SPELL',  v:R,mc:'305K',age:'15m',pnl:3.33,sc:.95},
+ {t:'GOBLIN', v:T,mc:'83K', age:'4m', bad:[5],why:'bundled 68%',       sig:'bundle',    line:'bundles: 23 wallets · 68%',sc:.16},
+ {t:'VAMP',   v:T,mc:'52K', age:'2m', bad:[2],why:'freeze authority',  sig:'freeze',    line:'freeze_authority: Some(dev)',sc:.08},
+ {t:'HOWL',   v:R,mc:'176K',age:'9m', pnl:1.90,sc:.89},
+ {t:'SHADE',  v:T,mc:'71K', age:'5m', bad:[6],why:'hidden proxy',      sig:'proxy',     line:'fn transfer() -> proxy 0x9f3a',sc:.05},
+ {t:'GRAVE',  v:T,mc:'39K', age:'1m', bad:[5],why:'dev holds 34%',     sig:'dev bag',   line:'dev: 34% · top10: 71%',sc:.12},
+ {t:'FANG',   v:R,mc:'248K',age:'11m',pnl:2.47,sc:.91},
+ {t:'NOX',    v:T,mc:'66K', age:'3m', bad:[6],why:'upgradeable',       sig:'upgrade',   line:'upgrade_authority: Some(dev)',sc:.10},
+ {t:'HAUNT',  v:T,mc:'58K', age:'2m', bad:[4],why:'maxTx 0.1%',        sig:'no exit',   line:'max_tx: 0.1%  // cant sell',sc:.06},
+ {t:'SPOOKYY',v:T,mc:'29K', age:'40s',bad:[0],why:'copycat of $SPOOKY',sig:'copycat',   line:'name: "SPOOKY" // clone',sc:.03},
+ {t:'OMEN',   v:R,mc:'391K',age:'19m',pnl:3.33,sc:.96},
+];
+const T0=1.3, CD=1.5, TEND=T0+CD*16, TOUT=25.7;
+const r0=rng(99);
+CASES.forEach((c,i)=>{const r=rng(500+i);c.addr='0x'+[...Array(4)].map(()=>Math.floor(r()*65536).toString(16).padStart(4,'0')).join('')+'…'+Math.floor(r()*65536).toString(16).padStart(4,'0');
+ c.ms=120+Math.floor(r()*90);});
+const DEC_OK=['// $T · {A}','mint_authority: None','freeze_authority: None','lp.burned: 100%','fee.buy/sell: 0% / 0%','holders: {H} · top10: {P}%','fn transfer(): spl-standard'];
+function decLines(c){const r=rng(c.t.length*31+c.mc.length);const H=c.v==R?400+Math.floor(r()*1400):40+Math.floor(r()*160),P=c.v==R?12+Math.floor(r()*10):30+Math.floor(r()*20);
+ return DEC_OK.map((l,i)=>{const bad=c.bad&&c.bad.includes(i);let s=bad?c.line:l.replace('$T','$'+c.t).replace('{A}',c.addr.slice(0,10)).replace('{H}',H).replace('{P}',P);if(i==0&&!bad)s=s;return {s,bad,head:i==0&&!bad}})}
+
+// ---- static build ----
+$('boo').innerHTML=catSVG('m');$('oBoo').innerHTML=catSVG('o');
+const SNIPS=['0x60806040','PUSH1 0x80','mint()','LP.lock','CALLER','SSTORE','0xa9059cbb','freeze?','fee()','owner()','DELEGATECALL','JUMPI','0xdead','approve()','SLOAD','REVERT','transfer()','authority','0x095ea7b3','bundle?','dev_wallet','blacklist?','proxy?','RETURN'];
+// streams (code running back & forth)
+const LANES=[];{const r=rng(7);for(let i=0;i<14;i++){const y=[160,300,360,420,480,540,600,660,720,780,840,872,1016,1292][i];
+ let s='';for(let k=0;k<26;k++)s+=SNIPS[Math.floor(r()*SNIPS.length)]+'  ';LANES.push({y,dir:i%2?-1:1,sp:90+r()*160,s,ph:r()*2000,col:['#7cff4f','#b07cff','#3cff9e','#ff7a1a'][i%4],op:.07+r()*.08})}}
+$('streams').innerHTML=LANES.map((l,i)=>`<div class="stream" id="ln${i}" style="top:${l.y}px;color:${l.col};opacity:${l.op}">${l.s+l.s}</div>`).join('');
+// hex dump
+function hexLine(n,r){let s=(n*16).toString(16).padStart(5,'0')+'  ';for(let k=0;k<8;k++)s+=Math.floor(r()*256).toString(16).padStart(2,'0')+' ';return s}
+// signatures list
+const SIGN=['honeypot','mint live','LP pull','blacklist','bundle','freeze','proxy','dev bag','upgrade','no exit','copycat'];
+// pot
+function potSVG(t,hot,col){const r=rng(3);let fl='';
+ for(let i=0;i<9;i++){const x=150+i*20,h=26+14*Math.abs(Math.sin(t*9+i*1.7))+hot*16;fl+=`<path d="M${x-10},228 Q${x-6},${228-h*.6} ${x},${228-h} Q${x+6},${228-h*.6} ${x+10},228 Z" fill="${i%2?'#ff7a1a':'#ffb020'}" opacity=".9"/>`}
+ let bb='';for(let i=0;i<14;i++){const rr=rng(40+i);const per=.7+rr()*.8;const u=((t+rr()*3)/per)%1;const x=130+rr()*204,y=30-u*(26+hot*30);const rad=3+rr()*6*(1+hot);
+  bb+=`<circle cx="${x}" cy="${y}" r="${rad*(1-u*.4)}" fill="none" stroke="${col}" stroke-width="1.6" opacity="${(1-u)*.9}"/>`}
+ return `<defs><radialGradient id="liq" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#eaffd0"/><stop offset=".35" stop-color="${col}"/><stop offset="1" stop-color="#0b3a12"/></radialGradient>
+ <filter id="pg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${6+hot*6}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <ellipse cx="232" cy="232" rx="120" ry="10" fill="#ff7a1a" opacity=".25" filter="url(#pg)"/>
+ ${fl}
+ <path d="M96,30 C80,120 120,206 232,212 C344,206 384,120 368,30 Z" fill="#06090a" stroke="#ff7a1a" stroke-width="3" filter="url(#pg)"/>
+ <path d="M120,120 C150,170 314,170 344,120" stroke="#b07cff" stroke-width="1.5" fill="none" opacity=".35"/>
+ <text x="232" y="150" text-anchor="middle" font-family="JB" font-weight="800" font-size="18" fill="#7cff4f" opacity=".55" letter-spacing="3">B00</text>
+ <path d="M150,206 L136,236 M314,206 L328,236" stroke="#ff7a1a" stroke-width="5" stroke-linecap="round"/>
+ <ellipse cx="232" cy="30" rx="140" ry="22" fill="url(#liq)" filter="url(#pg)"/>
+ <ellipse cx="232" cy="30" rx="146" ry="24" fill="none" stroke="#ff7a1a" stroke-width="7"/>
+ ${bb}`}
+// ---- events: log ----
+const LOG=[];{
+ LOG.push({t:.1,s:'<span class="o">rgk@boominal</span>:~$ ./boo --cauldron --decompile --live',c:''});
+ LOG.push({t:.5,s:'<span class="g">=^.^= part II · the cauldron is hot · 9 lives</span>'});
+ const r=rng(11);let tt=.7;while(tt<TEND){LOG.push({t:tt,s:`<span class="d">${'0x'+Math.floor(r()*1e8).toString(16).padStart(7,'0')}  ${SNIPS[Math.floor(r()*SNIPS.length)].padEnd(12)} ${['ok','ok','ok','skip','ok','hash'][Math.floor(r()*6)]}</span>`});tt+=.11+r()*.09}
+ CASES.forEach((c,k)=>{const st=T0+k*CD;
+  LOG.push({t:st+.02,s:`<span class="p">[boo]</span> decompile <b>$${c.t}</b> ${c.addr} · 7 fn`});
+  if(c.v==T){LOG.push({t:st+.78,s:`<span class="r">[boo] ☠ ${c.line}</span>`});LOG.push({t:st+.92,s:`<span class="r">[gate] ${c.sc.toFixed(2)} &lt; 0.85 → TRICK · buried $${c.t}</span>`})}
+  else{LOG.push({t:st+.92,s:`<span class="g">[gate] ${c.sc.toFixed(2)} ≥ 0.85 → TREAT · ape 0.5 SOL</span>`});LOG.push({t:st+1.3,s:`<span class="g">[act] tp 2x/4x/9x filled → +${c.pnl.toFixed(2)} SOL</span>`})}
+ });LOG.sort((a,b)=>a.t-b.t)}
+// pnl series
+function pnlAt(t){let p=0;CASES.forEach((c,k)=>{if(c.v!=R)return;const at=T0+k*CD+1.3;p+=c.pnl*eo(clamp((t-at)/.35))});return p}
+
+// ---- cat ----
+function setCat(root,state,t){
+ const col={idle:['#ffb020','#ff6a00'],sniff:['#ffe14d','#ff9a00'],trick:['#ff4d4d','#c4002a'],treat:['#7cff4f','#2fb000']}[state]||['#ffb020','#ff6a00'];
+ root.style.setProperty('--ec',col[0]);root.style.setProperty('--ec2',col[1]);
+ const open=root.querySelector('.e-open'),happy=root.querySelector('.e-happy'),brow=root.querySelector('.e-brow');
+ happy.style.display=state=='treat'?'':'none';open.style.display=state=='treat'?'none':'';brow.style.display=state=='trick'?'':'none';
+ const bl=(t%2.7)<.1&&state=='idle';open.setAttribute('transform',`translate(0,134) scale(1,${state=='sniff'?.45:bl?.1:1}) translate(0,-134)`);
+ root.querySelectorAll('.pup').forEach(p=>p.setAttribute('transform',`translate(${state=='sniff'?Math.sin(t*14)*3:Math.sin(t*1.3)*2},0)`));
+ const id=root.querySelector('[id^=tail]').id.slice(4);
+ root.querySelector('#tail'+id).setAttribute('transform',`rotate(${Math.sin(t*3)*8} 150 262)`);
+ root.querySelector('#head'+id).setAttribute('transform',`translate(${Math.sin(t*5)*1.5},${Math.sin(t*2.4)*2}) rotate(${state=='sniff'?Math.sin(t*10)*3-4:Math.sin(t*1.4)*3} 110 160)`);
+}
+function bezier(p0,p1,p2,u){const a=1-u;return [a*a*p0[0]+2*a*u*p1[0]+u*u*p2[0],a*a*p0[1]+2*a*u*p1[1]+u*u*p2[1]]}
+const MOUTH=[540,640];
+function tombX(i){return 26+i*94}
+function tombHTML(c,h){return `<div class="tomb" style="left:${tombX(c._ti)}px;transform:translateY(${(1-h)*100}px);opacity:${h}">
+ <svg width="84" height="96"><path d="M8,96 L8,34 Q8,6 42,6 Q76,6 76,34 L76,96 Z" fill="#141019" stroke="#b07cff" stroke-width="1.6"/><path d="M16,92 L16,36 Q16,14 42,14" stroke="#ffffff" stroke-opacity=".06" stroke-width="3" fill="none"/>
+ <text x="42" y="25" text-anchor="middle" font-family="JB" font-weight="800" font-size="10" fill="#b07cff">RIP</text></svg>
+ <div class="tt">$${c.t}</div><div class="tw">${c.why}</div></div>`}
+let ti=0;CASES.forEach(c=>{if(c.v==T)c._ti=ti++});
+
+// ---- render ----
+function render(t){
+ const boot=t<T0;const k=boot?-1:Math.min(15,Math.floor((t-T0)/CD));const u=boot?0:t-T0-k*CD;const c=k>=0?CASES[k]:null;
+ const done=i=>i<k||(i==k&&u>=.92);
+ // streams
+ LANES.forEach((l,i)=>{const e=$('ln'+i);const w=1900;let x=((t*l.sp*(1+(c&&u>.4&&u<.95?1.6:0))+l.ph)%w);e.style.transform=`translateX(${l.dir>0?x-w:-x}px)`});
+ // kpis
+ const tok=lerp(0,48812,Math.pow(clamp(t/TEND),1.1));$('k1').textContent=fmt(tok);
+ const nT=CASES.filter((x,i)=>x.v==T&&done(i)).length,nR=CASES.filter((x,i)=>x.v==R&&done(i)).length;
+ $('k2').textContent=nT;$('k2s').textContent=`${nT+nR} / 16 on the table · ${(nT+nR)?(nT/(nT+nR)*100).toFixed(1):'0.0'}% rugs`;
+ $('k3').firstChild.textContent='~'+(c?c.ms:Math.floor(t*120));
+ const pnl=pnlAt(t);$('k4').textContent='+'+pnl.toFixed(2);$('k4s').textContent=`${nR} treat${nR==1?'':'s'} · 0 rugs held`;$('pnlTag').textContent='+'+pnl.toFixed(2)+' SOL';
+ const pc=$('pnlCard');const hitP=c&&c.v==R&&u>1.25&&u<1.5;pc.style.boxShadow=hitP?'0 0 0 1px #7cff4f,0 0 30px rgba(124,255,79,.6)':'none';
+ $('bps').textContent=`● ${fmt(8000+Math.abs(Math.sin(t*3))*24000+(c&&u<.9?30000:0))} B/s decoded`;
+ // hex
+ const hr=rng(Math.floor(t*30)+1);const off=Math.floor(t*38);let hh='';
+ const hlRow=c&&u<.5?Math.floor(8+((k*7)%30)):-1;const badRow=c&&c.v==T&&u>.6&&u<1.2?hlRow+3:-1;
+ for(let i=0;i<44;i++){const n=off+i;const r=rng(n*7+3);let s=hexLine(n,r);if(i==hlRow||i==hlRow+1)s=`<span class="hl">${s}</span>`;else if(i==badRow)s=`<span class="bad">${s}</span>`;hh+=s+'\n'}
+ $('hex').innerHTML=hh;$('hexTag').textContent='0x'+(off*16).toString(16).padStart(6,'0');
+ // decompiler
+ if(c){const L=decLines(c);const typed=clamp((u-.08)/.75)*L.length;let h='';
+  L.forEach((l,i)=>{if(i>typed)return;const part=i+1>typed?l.s.slice(0,Math.floor((typed-i)*l.s.length)):l.s;
+   const cls=l.bad&&u>.75?'bad':(l.head?'p':(i+1<=typed?'ok':''));const mark=i+1<=typed?(l.bad?(u>.75?'  ☠':''):(l.head?'':'  ✓')):'';
+   h+=`<span class="ln">${String(i+1).padStart(2,'0')}</span><span class="${cls}">${part}${mark}</span>\n`});
+  if(u>.9)h+=`<span class="ln">08</span><span class="${c.v==T?'bad':'ok'}" style="font-weight:800">=&gt; ${c.sc.toFixed(2)} ${c.v==T?'&lt;':'≥'} 0.85 · ${c.v==T?'TRICK':'TREAT'}</span>\n`;
+  $('dec').innerHTML=h;$('decTag').innerHTML=u<.9?'<span class="y">decompiling…</span>':(c.v==T?'<span class="r">rug found</span>':'<span class="g">clean</span>')}
+ else{$('dec').innerHTML='<span class="ln">01</span><span class="d">// waiting for bytes'+'...'.slice(0,1+Math.floor(t*3)%3)+'</span>'}
+ // signatures
+ $('sigs').innerHTML=SIGN.map(s=>{const hit=CASES.find((x,i)=>x.sig==s&&done(i));const now=c&&c.sig==s&&u>.75&&u<1.5;
+  return `<span style="display:inline-block;width:12px;color:${hit?'#ff5a74':'#3a5a46'}">${hit?'■':'□'}</span><span style="color:${now?'#fff':hit?'#ff8a9c':'#5f8a6d'};${now?'background:rgba(255,59,92,.35);':''}padding:0 4px">${s}</span>${hit?` <span class="d">$${hit.t}</span>`:''}`}).join('<br>');
+ // center header
+ if(c){$('casePill').textContent=`CASE ${String(k+1).padStart(2,'0')} / 16`;$('ticker').textContent='$'+c.t;$('tmeta').textContent=`pump.fun · mc ${c.mc} · age ${c.age}`;$('addr').textContent=c.addr}
+ const vd=$('verdict');
+ if(c&&u>=.92){const a=eo(clamp((u-.92)/.12));vd.style.opacity=a*(1-clamp((u-1.42)/.08));vd.style.transform=`scale(${lerp(1.4,1,a)})`;
+  if(c.v==T){vd.innerHTML=`TRICK · ${c.why}`;vd.style.cssText+=';color:#ff5a74;border:2px solid #ff3b5c;background:rgba(40,4,12,.9);box-shadow:0 0 24px rgba(255,59,92,.6)'}
+  else{vd.innerHTML=`TREAT · +${c.pnl.toFixed(2)} SOL`;vd.style.cssText+=';color:#7cff4f;border:2px solid #7cff4f;background:rgba(6,30,10,.9);box-shadow:0 0 24px rgba(124,255,79,.6)'}}
+ else vd.style.opacity=0;
+ // cat state
+ let st='idle',bt='',bc='#ffd34d';if(c){if(u<.4){st='idle';bt=''}else if(u<.92){st='sniff';bt='*stir stir*'}else{st=c.v==T?'trick':'treat';bt=c.v==T?'BURY IT.':'yummy.';bc=c.v==T?'#ff3b5c':'#7cff4f'}}
+ else{bt=t>.6?'heating up...':'';bc='#b07cff'}
+ setCat($('boo').querySelector('svg'),st,t);
+ const b=$('bubble');b.style.display=bt?'':'none';b.textContent=bt;b.style.borderColor=bc;b.style.color=bc;b.style.boxShadow=`0 0 12px ${bc}`;
+ // pot + ladle
+ const hot=c?(u>.4&&u<.95?1:.25):.15;const potCol=c&&u>.92?(c.v==T?'#ff3b5c':'#7cff4f'):'#7cff4f';
+ $('pot').innerHTML=potSVG(t,hot,potCol);
+ const sp=c&&u>.35&&u<.95?11:2.2;const ang=Math.sin(t*sp)*(sp>3?15:8);
+ $('ladle').innerHTML=`<g transform="rotate(${ang} 262 300)"><line x1="262" y1="300" x2="356" y2="150" stroke="#3a2412" stroke-width="7" stroke-linecap="round"/><line x1="262" y1="300" x2="356" y2="150" stroke="#ff9a2e" stroke-width="2" stroke-linecap="round" opacity=".6"/><ellipse cx="258" cy="306" rx="16" ry="7" fill="#3a2412" stroke="#ff9a2e" stroke-width="1.5"/></g>`;
+ // steam glyphs
+ let sg='';for(let i=0;i<26;i++){const r=rng(900+i);const per=1.6+r()*1.6;const uu=((t+r()*per)/per)%1;const x=110+r()*244+Math.sin(t*2+i)*14;const y=300-uu*300;
+  const ch=['0','1','f','a','☠','{','}','0x','✦','ff','00'][Math.floor(r()*11)];
+  sg+=`<text x="${x}" y="${y}" font-family="JB" font-size="${10+r()*8}" font-weight="700" fill="${i%3==0?'#b07cff':potCol}" opacity="${Math.sin(uu*Math.PI)*.55*(.5+hot*.6)}">${ch}</text>`}
+ $('steam').innerHTML=sg;
+ // chips: bytes flying in from left, and from right decompiler back in, then result out
+ let ch='';
+ if(c){for(let j=0;j<5;j++){const st0=j*.07;const uu=clamp((u-st0)/.42);if(uu<=0||uu>=1)continue;
+   const y0=200+((k*97+j*131)%560);const p=bezier([290,y0],[400,y0-80],MOUTH,eio(uu));
+   ch+=`<div class="chip" style="left:${p[0]-34}px;top:${p[1]-10}px;opacity:${1-uu*.3};transform:scale(${1-uu*.35})">${SNIPS[(k*5+j)%SNIPS.length]}</div>`}
+  for(let j=0;j<3;j++){const st0=.45+j*.1;const uu=clamp((u-st0)/.35);if(uu<=0||uu>=1)continue;const y0=230+j*120;
+   const p=bezier([790,y0],[680,y0-60],MOUTH,eio(uu));ch+=`<div class="chip p" style="left:${p[0]-30}px;top:${p[1]-10}px;opacity:${1-uu*.3}">${['ast()','sig?','score'][j]}</div>`}
+  if(u>=.95){const uu=clamp((u-.95)/.38);
+   if(c.v==T){const tx=16+tombX(c._ti)+42,ty=940;const p=bezier(MOUTH,[MOUTH[0]+(tx-MOUTH[0])*.4,520],[tx,ty],eio(uu));
+    if(uu<1)ch+=`<div class="chip big rd" style="left:${p[0]-50}px;top:${p[1]-16}px;transform:rotate(${uu*360}deg) scale(${1-uu*.3})">☠ $${c.t}</div>`}
+   else{const p=bezier(MOUTH,[700,250],[938,110],eio(uu));
+    if(uu<1)ch+=`<div class="chip big gn" style="left:${p[0]-56}px;top:${p[1]-16}px;transform:scale(${1+Math.sin(uu*Math.PI)*.3})">🬀 +${c.pnl.toFixed(2)} SOL</div>`;
+    for(let s=0;s<10;s++){const r=rng(k*40+s);const q=bezier(MOUTH,[600+r()*200,200+r()*200],[938,110],clamp(eio(uu)-s*.03));
+     ch+=`<div class="abs" style="left:${q[0]}px;top:${q[1]}px;width:7px;height:7px;border-radius:50%;background:#7cff4f;box-shadow:0 0 8px #7cff4f;z-index:29;opacity:${uu<1?.9:0}"></div>`}}}}
+ $('chips').innerHTML=ch.replace(/🬀 /g,'');
+ // graveyard
+ let tb='';CASES.forEach((x,i)=>{if(x.v!=T)return;const at=T0+i*CD+1.3;const h=eo(clamp((t-at)/.25));if(h>0)tb+=tombHTML(x,h)});$('tombs').innerHTML=tb;
+ $('ripTag').textContent=nT+' RIP';
+ // chart
+ let d='',area='';const W=500,H=210,N=120;let mx=14;
+ for(let i=0;i<=N;i++){const tt=i/N*TEND;if(tt>t)break;const v=pnlAt(tt)+Math.sin(tt*3.1)*.18+Math.sin(tt*7.7)*.08;const x=i/N*W,y=H-8-(v+.5)/mx*(H-20);d+=(i?'L':'M')+x.toFixed(1)+','+y.toFixed(1)}
+ let grid='';for(let g=0;g<=4;g++){const y=H-8-(g*3.5+.5)/mx*(H-20);grid+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="#173323"/><text x="${W-2}" y="${y-3}" text-anchor="end" font-size="8.5" font-family="JB" fill="#3a5a46">${(g*3.5).toFixed(1)}</text>`}
+ let marks='';CASES.forEach((x,i)=>{const at=T0+i*CD+.92;if(at>t)return;const xx=at/TEND*W;marks+=`<line x1="${xx}" x2="${xx}" y1="${H-8}" y2="${H-18}" stroke="${x.v==T?'#ff3b5c':'#7cff4f'}" stroke-width="2"/>`});
+ const last=d.split(/[ML]/).pop().split(',');
+ $('chart').innerHTML=grid+marks+(d?`<path d="${d} L${last[0]},${H-8} L0,${H-8} Z" fill="rgba(124,255,79,.08)"/><path d="${d}" fill="none" stroke="#7cff4f" stroke-width="2.2" style="filter:drop-shadow(0 0 4px #7cff4f)"/><circle cx="${last[0]}" cy="${last[1]}" r="4" fill="#eaffde" style="filter:drop-shadow(0 0 6px #7cff4f)"/>`:'');
+ // log
+ const L=LOG.filter(e=>e.t<=t).slice(-16);$('log').innerHTML=L.map(e=>e.s).join('\n');$('lps').textContent=Math.round(9+Math.abs(Math.sin(t*2))*6)+' l/s';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ // shake + flash on rug detect
+ const app=$('app');let sx=0,sy=0,fl=0,fc='255,59,92';
+ if(c&&c.v==T&&u>.75&&u<1.0){const a=1-(u-.75)/.25;sx=Math.sin(t*90)*7*a;sy=Math.cos(t*77)*5*a;fl=.16*a}
+ if(c&&c.v==R&&u>1.25&&u<1.45){fl=.12*(1-(u-1.25)/.2);fc='124,255,79'}
+ $('flash').style.opacity=fl;$('flash').style.background=`radial-gradient(circle at 50% 50%,rgba(${fc},.0),rgba(${fc},.9))`;
+ // decor
+ let dec=web(1080,150,-1,1,36,.18)+web(16,1010,1,-1,40,.18)+web(1064,1286,-1,-1,40,.16);
+ [[3,4.4,180,1],[8.6,4.8,1000,-1],[14,4.2,250,-1],[19.2,4.6,1020,1],[22,3.6,160,1]].forEach(([t0,du,y,dir],i)=>{const uu=(t-t0)/du;if(uu<0||uu>1)return;dec+=batG(dir>0?lerp(-40,1120,uu):lerp(1120,-40,uu),y+Math.sin(uu*9+i)*24,1.5,t*14+i,1)});
+ $('decor').innerHTML=dec;
+ // outro
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;
+ app.style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';
+ app.style.transform=`translate(${sx}px,${sy}px)`;
+ if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){const a=eo(clamp(s/.6));
+ $('oT').style.transform=`scale(${lerp(.6,1,a)})`;$('oT').style.opacity=a;
+ [['oH',.25],['oS',.45],['oStats',.8],['oFlow',.95],['oB',1.1],['oF',1.2]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`});
+ const ca=eo(clamp((s-.2)/.6));$('oBoo').style.opacity=ca;$('oBoo').style.transform=`translateY(${(1-ca)*60+Math.sin(s*3)*3}px)`;
+ setCat($('oBoo').querySelector('svg'),s<1.6?'treat':'trick',t);
+ $('oPot').innerHTML=potSVG(t,.8,'#7cff4f');$('oPot').style.opacity=ca;
+ $('oBub').style.opacity=clamp((s-1.4)/.2)*(Math.floor(s*2.5)%2?1:.7);
+ let tb='';CASES.filter(x=>x.v==T).forEach((x,i)=>{const h=eo(clamp((s-.9-i*.08)/.3));tb+=`<div class="tomb" style="left:${30+i*94}px;bottom:0;transform:translateY(${(1-h)*90}px) scale(.85);opacity:${h}">${tombHTML(x,1).replace(/^<div class="tomb"[^>]*>/,'').replace(/<\/div>$/,'')}</div>`});
+ $('oTombs').innerHTML=tb;
+ $('oBg').innerHTML=`<defs><radialGradient id="ob" cx="50%" cy="55%" r="55%"><stop offset="0" stop-color="#7cff4f" stop-opacity=".16"/><stop offset=".6" stop-color="#6a3aba" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="1080" height="1350" fill="url(#ob)"/>`+web(1080,0,-1,1,150,.25)+web(0,0,1,1,120,.22)+web(0,1350,1,-1,110,.18)+web(1080,1350,-1,-1,130,.2);
+ let h='';for(let i=0;i<10;i++){const r=rng(300+i);const d=.2+r()*.6;const uu=clamp((s-d)/2.6);if(uu<=0)continue;const ang=-Math.PI/2+(r()-.5)*2.8;const dist=eo(uu)*(380+r()*360);
+  h+=batG(540+Math.cos(ang)*dist*1.3,690+Math.sin(ang)*dist*.9,1.4+r()*1.5,s*15+i,1)}$('oBats').innerHTML=h;
+}
+window.render=render;
+document.fonts.ready.then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>
