@@ -1,67 +1,70 @@
-<p align="center"><img src="assets/banner.png" alt="BOOMINAL · Halloween Edition" width="100%"></p>
+<p align="center"><img src="assets/banner.png" alt="BOOMINAL" width="100%"></p>
 
-<h1 align="center">BOOMINAL 🎃</h1>
-<p align="center"><b>Boo the witch cat runs my pump.fun terminal.</b><br>
+<h1 align="center">BOOMINAL 🐈‍⬛</h1>
+<p align="center"><b>Boo the cat filters pump.fun rugs before you ape.</b><br>
 <code>SCAN → ASK → CAT → GATE 0.85 → ACT</code></p>
-<p align="center">Halloween edition of <a href="https://github.com/rgkdegen/catminal">CATMINAL</a> · built by RUGIKK · <a href="https://x.com/rgk_degen">@rgk_degen</a></p>
+<p align="center">
+<img alt="license" src="https://img.shields.io/badge/license-MIT-orange">
+<img alt="node" src="https://img.shields.io/badge/node-18%2B-7ab8ff">
+<img alt="deps" src="https://img.shields.io/badge/runtime%20deps-0-5dff8f">
+<img alt="tests" src="https://img.shields.io/badge/tests-npm%20test-b07cff">
+<img alt="episodes" src="https://img.shields.io/badge/episodes-6-ff4d8d">
+</p>
+<p align="center">sequel to <a href="https://github.com/rgkdegen/catminal">CATMINAL</a> · built by RUGIKK · <a href="https://x.com/rgk_degen">@rgk_degen</a></p>
 
 ---
 
-## What it is
+## Why Boo exists
 
-BOOMINAL is a rug-filter pipeline for fresh pump.fun pairs, run by **Boo**, a black witch cat with fangs and nine lives.
+In May 2025, Solidus Labs reported that about **98.6% of tokens launched on pump.fun** showed rug-pull or pump-and-dump patterns ([CoinDesk](https://hotfix.coindesk.com/business/2025/05/07/98-of-tokens-on-pump-fun-have-been-rug-pulls-or-an-act-of-fraud-new-report-says), [The Defiant](https://thedefiant.io/news/defi/alarming-99-of-memecoin-launches-on-pumpfun-are-pump-and-dumps-or-rug-pulls-report)).
 
-Every new coin gets one question: **trick or treat?**
+So the edge isn't finding winners. It's **not touching the 98%**.
 
-- **Trick:** the score is under 0.85 or the coin trips a hard rug flag. Boo swipes it off the table and never buys.
-- **Treat:** the score clears the gate. The code apes 0.5 SOL and sets a take-profit ladder.
+Boo's whole job is to say **no** fast, and say **yes** only when nothing is wrong:
 
-The LLM reads, Boo decides, the code acts. No text generation happens in the decision path, so a call takes about 166 ms.
+- **8 hard red flags.** Any single one is an instant skip, whatever the score.
+- **One 0.85 confidence gate** on top, so "probably fine" still gets skipped.
+- **No LLM text in the decision.** Seven numeric checks, one score, milliseconds per coin.
+- **Guardrails** that can't be turned off: spend cap, no holding through an LP unlock, no auto-posting.
 
-<p align="center"><img src="assets/preview.gif" alt="BOOMINAL terminal" width="420"></p>
+## The episodes
 
-## Halloween night run
+Same engine, six ways to watch it work. Every episode is a single HTML page that plays in the browser and exports to MP4.
 
-| | |
+| | | |
+|:---:|:---:|:---:|
+| <img src="assets/episodes/ep1-terminal.gif" width="240"><br>**I · Terminal**<br><sub>`terminal/index.html`</sub> | <img src="assets/episodes/ep2-cauldron.gif" width="240"><br>**II · The Cauldron**<br><sub>decompiles contract bytecode · `part2.html`</sub> | <img src="assets/episodes/ep3-seance.gif" width="240"><br>**III · The Séance**<br><sub>ghosts of rugs snitch on their devs · `part3.html`</sub> |
+| <img src="assets/episodes/ep4-rider.gif" width="240"><br>**BOO RIDER**<br><sub>arcade: catch pumps, jump rugs · `rider.html`</sub> | <img src="assets/episodes/ep5-night-shift.gif" width="240"><br>**NIGHT SHIFT**<br><sub>you sleep, Boo works · `nightshift.html`</sub> | <img src="assets/episodes/ep6-swipes.gif" width="240"><br>**BOO SWIPES**<br><sub>memecoins as dating profiles · `swipes.html`</sub> |
+
+<details><summary>Episode run numbers (simulated)</summary>
+
+| episode | cases | skipped | entered | PnL |
+|---|---|---|---|---|
+| I · Terminal | 12 | 8 | 4 | +6.66 SOL |
+| II · Cauldron | 16 | 11 | 5 | +13.13 SOL |
+| III · Séance | 12 | 8 | 4 | +31.31 SOL |
+| Boo Rider | 18 | 10 | 8 | +21.37 SOL |
+| Night Shift | 14 | 8 | 6 | +24.80 SOL |
+| Boo Swipes | 14 | 9 | 5 | +15.50 SOL |
+
+These are scripted runs made for the videos, not live trading results.
+</details>
+
+## How it works
+
+| stage | what happens |
 |---|---|
-| Pairs scanned | **31,031** |
-| Tricked off the table | **81.3%** dead on day one, never bought |
-| Cases on the table | 12 |
-| Tricks swiped | **8** |
-| Treats aped | **4** ($PUMPKN, $WITCH, $CANDY, $SPOOKY) |
-| Session PnL | **+6.66 SOL** |
-| Rugs held | **0** |
-| Median decision | ~166 ms |
+| **01 SCAN** | one snapshot per new pair: dev wallet, holders, top 10, bundles, X mentions, LP, mint, sell tax, socials |
+| **02 ASK** | seven checks, each 0 to 1: rug_risk, hype, holders, dev_trust, bundle, copycat, bots |
+| **03 CAT** | Boo packs them into one state and scores it. No text generation |
+| **04 GATE** | any hard red flag, or a score under 0.85 = skip |
+| **05 ACT** | clean coins only: 0.5 SOL, tp 2× / 4× / 9×, sl −35% |
 
-### What Boo swiped
+Full breakdown: **[docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** · every flag and its rule: **[docs/RED_FLAGS.md](docs/RED_FLAGS.md)**
 
-| Ticker | Trick |
-|---|---|
-| $GHOST | dev holds 31% |
-| $GHOUL | LP unlocked |
-| $HEX | honeypot, 99% sell tax |
-| $MUMMY | 71% bundled |
-| $CRYPT | copycat of $WITCH |
-| $SKULL | 92% of X mentions are bots |
-| $ZOMBI | socials 3 minutes old |
-| $BATZ | top 10 wallets hold 64% |
+### The red flags
 
-## The pipeline
-
-| Stage | What happens |
-|---|---|
-| **01 SCAN** | new pair, dev wallet, holders, top 10, bundle check, X mentions, LP / mint, socials |
-| **02 ASK** | seven cheap questions (rug_risk, hype, holders, dev_trust, bundle, copycat, bots), each a number in 0–1 |
-| **03 CAT** | Boo packs the answers into one state and scores it with paw head and score head. No generation, ~$0.00004 per call |
-| **04 GATE** | under 0.85 is a trick and goes to the crypt, watchlist, dev blacklist or human review |
-| **05 ACT** | 0.85 or higher is a treat: ape 0.5 SOL, tp ladder 2× / 4× / 9×, sl −35%, blacklist sync, alpha post saved as a draft |
-
-### Guardrails (always on)
-
-- never holds through an LP unlock
-- 5 SOL spend cap per session
-- one life max per trade (Boo has 9)
-- never auto-posts; drafts only
+honeypot tax · LP unlocked · dev bag > 10% · bundled launch > 50% · copycat · bot hype > 85% · socials < 10 min old · top-10 holding > 60%
 
 ## Run it
 
@@ -69,19 +72,14 @@ The LLM reads, Boo decides, the code acts. No text generation happens in the dec
 git clone https://github.com/rgkdegen/boominal
 cd boominal
 
-# 1. the pipeline demo on the Halloween cases
-node src/pipeline.js
+node src/pipeline.js        # run Boo on the 12 demo coins
+npm test                    # check the gate rules (no install needed)
+open terminal/swipes.html   # watch any episode in the browser
 
-# 2. the animated terminal: just open it in a browser
-open terminal/index.html
-
-# 3. export the 30s clip and the banner (needs Playwright + ffmpeg)
+# export an episode to MP4 (needs Playwright + ffmpeg)
 npm i
-npm run render      # → boominal.mp4 (1080×1350, 30 fps)
-npm run banner      # → assets/banner.png
+node scripts/render.js out.mp4 [audio.mp3] nightshift.html
 ```
-
-Sample output:
 
 ```
   🎃 BOOMINAL · Boo the witch cat · gate 0.85
@@ -89,37 +87,38 @@ Sample output:
   cat> TRICK  $GHOST   0.01  dev holds 31%
   cat> TREAT  $PUMPKN  0.87  ape 0.5 SOL · tp 2x/4x/9x · sl -35%
   cat> TRICK  $HEX     0.08  honeypot, sell tax 99%
-  cat> TREAT  $WITCH   0.95  ape 0.5 SOL · tp 2x/4x/9x · sl -35%
   ...
   8 tricks swiped · 4 treats · spent 2.0/5 SOL · lives 9/9
 ```
 
-## The saga
+## Roadmap
 
-| File | Episode | Run |
-|---|---|---|
-| `terminal/index.html` | **I · Halloween Edition**: SCAN → ASK → CAT → GATE → ACT | +6.66 SOL |
-| `terminal/part2.html` | **II · The Cauldron**: Boo decompiles contract bytecode, buries 11 rugs | +13.13 SOL |
-| `terminal/part3.html` | **III · The Séance**: ghosts of buried rugs snitch on their devs' new launches | +31.31 SOL |
-| `terminal/rider.html` | **BOO RIDER**: arcade run, catch pumps, jump rugs, paint the chart | +21.37 SOL |
-| `terminal/nightshift.html` | **NIGHT SHIFT**: you sleep 00:00 → 08:00, Boo trades at the desk | +24.80 SOL |
-| `terminal/swipes.html` | **BOO SWIPES**: memecoins as dating profiles, swipe left on red flags | +15.50 SOL |
-
-Export any episode: `node scripts/render.js out.mp4 [audio] part2.html`
+Next up: live pump.fun feed, mint/freeze authority checks, serial-rugger memory (the part III séance for real), sniper clustering, Telegram alerts, paper-trading mode. Full list: **[docs/ROADMAP.md](docs/ROADMAP.md)**
 
 ## Repo layout
 
 ```
-terminal/index.html   animated BOOMINAL terminal (plays live in the browser)
-src/pipeline.js       SCAN → ASK → CAT → GATE → ACT scoring logic
-data/cases.json       the 12 Halloween-night token snapshots
-scripts/render.js     export the terminal to MP4
-scripts/banner.js     render the README banner
-assets/               banner, preview gif, fonts
+src/pipeline.js        the filter: ask → tricks → cat score → gate → act
+data/cases.json        12 demo token snapshots
+test/                  gate-rule tests (node --test)
+docs/                  how it works · red flags · roadmap
+terminal/              the 6 animated episodes + shared cat art (_shared.js)
+scripts/render.js      export any episode to MP4
+scripts/banner.js      render the README banner
+assets/                banner, episode gifs, fonts
 ```
+
+## FAQ
+
+**Does it trade with real money?**
+Not yet. The current version reads token snapshots from a file and never touches a wallet. A live feed and paper trading are next on the roadmap.
+
+**Why a cat?**
+Rug checks are boring and nobody watches boring. Boo makes the same checks watchable.
+
+**Can I add my own flags or coins?**
+Yes. Add a rule in `tricks()` in `src/pipeline.js`, add a test, or drop your own snapshots in a JSON file and run `node src/pipeline.js my.json`.
 
 ---
 
-<p align="center"><img src="assets/outro.png" alt="BOOMINAL outro" width="320"></p>
-
-<p align="center"><sub>Simulated run. Metrics are illustrative. Not financial advice. Trick or treat 👻</sub></p>
+<p align="center"><sub>MIT · educational project · not financial advice · Boo doesn't date rugs 🐈‍⬛</sub></p>

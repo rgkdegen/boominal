@@ -1,12 +1,15 @@
 {
   "name": "boominal",
-  "version": "10.31.0",
-  "description": "Boo the witch cat runs a pump.fun rug-filter terminal. SCAN → ASK → CAT → GATE 0.85 → ACT. Halloween edition of CATMINAL.",
+  "version": "11.3.0",
+  "description": "Boo the cat filters pump.fun rugs before you ape. SCAN → ASK → CAT → GATE 0.85 → ACT. 8 hard red flags, one confidence gate, 6 animated episodes.",
   "license": "MIT",
   "scripts": {
     "demo": "node src/pipeline.js",
     "banner": "node scripts/banner.js",
-    "render": "node scripts/render.js boominal.mp4"
+    "render": "node scripts/render.js boominal.mp4",
+    "test": "node --test test/pipeline.test.js"
   },
-  "devDependencies": { "playwright": "^1.47.0" }
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
 }
