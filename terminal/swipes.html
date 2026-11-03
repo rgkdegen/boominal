@@ -1,0 +1,209 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>BOO SWIPES</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#0d0710}
+body{font-family:JB,monospace;color:#f6eef2;font-size:12px}
+.abs{position:absolute}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(600px 500px at 540px 560px,rgba(255,77,141,.16),transparent 70%),
+ radial-gradient(700px 500px at 0% 100%,rgba(255,154,46,.08),transparent 70%),
+ radial-gradient(700px 500px at 100% 0%,rgba(176,124,255,.1),transparent 70%),#0d0710}
+.panel{position:absolute;background:rgba(24,12,22,.9);border:1px solid #3a1d33;border-radius:12px}
+.ph{position:absolute;left:14px;top:11px;font-size:11px;font-weight:800;letter-spacing:.6px}
+.pt{position:absolute;right:14px;top:11px;font-size:10px}
+.pk{color:#ff4d8d}.g{color:#5dff8f}.r{color:#ff5a74}.d{color:#9a7f92}.y{color:#ffd34d}.o{color:#ff9a2e}
+#phone{left:300px;top:150px;width:480px;height:946px;border-radius:56px;background:#050306;border:3px solid #3a2a36;box-shadow:0 0 0 10px #160c14,0 30px 80px rgba(0,0,0,.6),0 0 80px rgba(255,77,141,.25);overflow:hidden}
+.card{position:absolute;left:22px;top:110px;width:430px;height:640px;border-radius:26px;overflow:hidden;background:#1a0f18;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.card .av{position:absolute;inset:0;bottom:200px}
+.card .shade{position:absolute;left:0;right:0;top:200px;height:240px;background:linear-gradient(180deg,transparent,rgba(10,4,9,.96))}
+.card .nm{position:absolute;left:22px;top:330px;font-family:RB;font-weight:900;font-size:40px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.card .nm span{font-family:JB;font-weight:400;font-size:22px;color:#e8d9e2}
+.card .loc{position:absolute;left:24px;top:384px;font-size:12px;color:#e8d9e2}
+.card .bio{position:absolute;left:24px;right:24px;top:418px;font-size:15px;font-style:italic;color:#fff}
+.card .chips{position:absolute;left:20px;right:20px;top:460px;display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;border:1px solid}
+.card .read{position:absolute;left:20px;right:20px;top:512px;height:96px;border-radius:14px;padding:9px 12px;font-size:11.5px;line-height:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.stamp{position:absolute;top:60px;padding:6px 16px;border:5px solid;border-radius:12px;font-family:RB;font-weight:900;font-size:52px;letter-spacing:3px}
+.row{display:flex;justify-content:space-between;align-items:center;height:42px;border-bottom:1px solid #2a1625;font-size:11.5px}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#outro{position:absolute;inset:0;z-index:70;opacity:0}
+#outro .c{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div class="abs" style="left:20px;top:16px;font-family:RB;font-weight:900;font-size:44px;color:#ff9a2e;text-shadow:0 0 16px rgba(255,154,46,.6)">BOO<span style="color:#ff4d8d;margin-left:12px;text-shadow:0 0 16px rgba(255,77,141,.8)">SWIPES</span></div>
+ <div class="abs d" style="left:22px;top:72px;font-size:12px">swipe left on rugs · swipe right on pumps</div>
+ <div class="abs" style="right:20px;top:18px;text-align:right"><div class="d" style="font-size:10.5px;font-weight:800;letter-spacing:2px">MATCH PNL</div><div id="score" style="font-size:44px;font-weight:800;color:#5dff8f;text-shadow:0 0 16px rgba(93,255,143,.5)">+0.00</div></div>
+ <div class="abs" style="left:380px;top:20px;width:320px;text-align:center"><div class="d" style="font-size:10.5px;font-weight:800;letter-spacing:2px">SWIPES</div><div style="font-size:30px;font-weight:800"><span class="r" id="nNo">0</span> <span class="d" style="font-size:16px">✕ · ♥</span> <span class="g" id="nYes">0</span></div></div>
+
+ <!-- left: red flag checklist -->
+ <div class="panel" style="left:16px;top:150px;width:268px;height:700px">
+  <div class="ph pk">BOO'S RED FLAGS 🚩</div><div class="pt d">auto-nope</div>
+  <div id="flags" class="abs" style="left:14px;right:14px;top:40px"></div>
+  <div class="abs d" style="left:14px;right:14px;bottom:14px;font-size:10.5px;line-height:16px">one red flag = swipe left.<br>no flags + score ≥ 0.85 = swipe right.</div>
+ </div>
+ <!-- right: matches -->
+ <div class="panel" style="left:796px;top:150px;width:268px;height:460px">
+  <div class="ph g">MATCHES ♥</div><div class="pt d" id="mTag">0</div>
+  <div id="matches" class="abs" style="left:14px;right:14px;top:40px"></div>
+ </div>
+ <div id="booW" class="abs" style="left:822px;top:640px;width:220px;height:290px;z-index:2"></div>
+ <div id="bub" class="abs" style="left:812px;top:612px;z-index:6;padding:4px 10px;border:1.5px solid #ffd34d;border-radius:8px;font-size:13px;font-weight:800;background:rgba(14,6,12,.9);white-space:nowrap"></div>
+
+ <!-- phone -->
+ <div id="phone" class="abs">
+  <div class="abs" style="left:170px;top:14px;width:140px;height:34px;border-radius:18px;background:#000"></div>
+  <div class="abs" style="left:34px;top:22px;font-size:14px;font-weight:800" id="pClock">17:26</div>
+  <div class="abs" style="left:0;right:0;top:64px;text-align:center;font-family:RB;font-weight:900;font-size:26px;color:#ff4d8d">purr<span style="color:#fff">fect</span> <span style="font-family:JB;font-weight:400;font-size:11px;color:#9a7f92">· memecoin edition</span></div>
+  <div id="stack"></div>
+  <div class="abs" style="left:0;right:0;top:778px;display:flex;justify-content:center;gap:46px">
+   <div id="bNo" style="width:84px;height:84px;border-radius:50%;border:3px solid #ff5a74;display:flex;align-items:center;justify-content:center;font-size:40px;color:#ff5a74;font-weight:800">✕</div>
+   <div id="bYes" style="width:84px;height:84px;border-radius:50%;border:3px solid #5dff8f;display:flex;align-items:center;justify-content:center;font-size:40px;color:#5dff8f">♥</div>
+  </div>
+  <div class="abs d" style="left:0;right:0;top:884px;text-align:center;font-size:10.5px" id="pFoot">Boo is swiping · 0 profiles left</div>
+  <div id="matchOv" class="abs" style="inset:0;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(120,20,60,.98),rgba(10,4,9,.98) 70%);z-index:20"></div>
+ </div>
+ <svg id="paw" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:30;pointer-events:none"></svg>
+ <svg id="hearts" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:31;pointer-events:none"></svg>
+
+ <!-- bottom -->
+ <div class="panel" style="left:16px;top:1112px;width:1048px;height:174px">
+  <div class="ph o">boo · dms</div><div class="pt d">matches only</div>
+  <div id="dms" class="abs" style="left:14px;right:14px;top:36px;font-size:12px;line-height:26px"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,#ff4d8d,#ff9a2e);box-shadow:0 0 8px #ff4d8d"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">READ THE BIO · SPOT THE RED FLAG · SWIPE</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">built by RUGIKK · simulated run · @rgk_degen</div>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oH" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div class="c" id="o1" style="top:110px;font-family:RB;font-weight:900;font-size:124px;color:#ff9a2e;text-shadow:0 0 30px rgba(255,154,46,.8)">BOO<span style="color:#ff4d8d;margin-left:22px;text-shadow:0 0 30px rgba(255,77,141,.9)">SWIPES</span></div>
+ <div class="c" id="o2" style="top:270px;font-size:26px;font-weight:800">my cat has better taste in coins than I have in anything</div>
+ <div id="oBoo" class="abs" style="left:420px;top:340px;width:240px;height:316px"></div>
+ <div class="c" id="o3" style="top:700px;font-size:96px;font-weight:800;color:#5dff8f;text-shadow:0 0 28px rgba(93,255,143,.7)">+15.50 SOL</div>
+ <div class="c" id="o4" style="top:822px;font-size:20px;font-weight:800"><span class="r">9 swiped left</span> &nbsp;·&nbsp; <span class="g">5 matches</span> &nbsp;·&nbsp; 0 rugs dated</div>
+ <div class="c d" id="o5" style="top:864px;font-size:13px">every rug had a red flag in the bio. Boo read every bio.</div>
+ <div class="c" id="o6" style="top:930px;font-family:RB;font-weight:900;font-size:46px;color:#ff4d8d;text-shadow:0 0 18px rgba(255,77,141,.7)">Boo doesn't date rugs.</div>
+ <div class="c" id="o7" style="top:1080px;font-family:RB;font-weight:700;font-size:30px;color:#ff9a2e;text-shadow:0 0 14px rgba(255,160,64,.6)">built by RUGIKK</div>
+ <div class="c d" id="o8" style="top:1126px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+</div>
+<script src="_shared.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const FL=['dev bag','LP unlocked','bundled','copycat','mint live','honeypot','snipers','freeze','proxy'];
+const N='no',Y='yes';
+const CARDS=[
+ {t:'EX',v:N,age:'4m',mc:'38K',h:62,bio:'"still close with my dev wallet"',f:0,real:'dev holds 44% of supply',green:['funny','active']},
+ {t:'HONEY',v:Y,age:'11m',mc:'184K',h:640,bio:'"LP burned, no games 🍯"',pnl:2.40,real:'clean dev · LP burned · 640 holders',green:['LP burned','mint revoked','real holders']},
+ {t:'GHOSTED',v:N,age:'2m',mc:'51K',h:44,bio:'"I might disappear, no pressure"',f:1,real:'LP unlocked · can pull anytime',green:['mysterious']},
+ {t:'LOVEBOMB',v:N,age:'3m',mc:'92K',h:23,bio:'"23 wallets already love me 🥰"',f:2,real:'bundled 70% across 23 wallets',green:['popular']},
+ {t:'SOULMATE',v:Y,age:'14m',mc:'296K',h:1120,bio:'"looking for something long term"',pnl:3.85,real:'fair launch · top10 14% · LP burned',green:['loyal holders','LP burned','fair launch']},
+ {t:'CATFISH',v:N,age:'1m',mc:'29K',h:18,bio:'"yes these are my real photos"',f:3,real:'copycat of $CRUSH · same art, new dev',green:['looks familiar']},
+ {t:'SITUATIONSHIP',v:N,age:'5m',mc:'47K',h:80,bio:'"let\'s not put labels on supply"',f:4,real:'mint authority still live',green:['chill']},
+ {t:'CRUSH',v:Y,age:'9m',mc:'158K',h:510,bio:'"the original. accept no copies"',pnl:1.95,real:'clean contract · organic volume',green:['original','mint revoked','organic']},
+ {t:'TOXIC',v:N,age:'3m',mc:'66K',h:97,bio:'"once you\'re in, you can\'t leave 😘"',f:5,real:'honeypot · 99% sell tax',green:['committed']},
+ {t:'PLAYER',v:N,age:'2m',mc:'71K',h:140,bio:'"40 others are talking to me rn"',f:6,real:'40 sniper wallets in block 0',green:['in demand']},
+ {t:'SPARK',v:Y,age:'16m',mc:'402K',h:1460,bio:'"slow start. big energy ⚡"',pnl:4.20,real:'dev sold 0 · holders climbing',green:['growing','LP burned','dev holds 1%']},
+ {t:'REDFLAG',v:N,age:'4m',mc:'35K',h:55,bio:'"I decide who gets to sell"',f:7,real:'freeze authority on',green:['leader']},
+ {t:'BADBOY',v:N,age:'6m',mc:'83K',h:120,bio:'"don\'t ask where your SOL goes"',f:8,real:'transfers routed to hidden proxy',green:['edgy']},
+ {t:'FOREVER',v:Y,age:'21m',mc:'518K',h:2210,bio:'"here for the long run ♾️"',pnl:3.10,real:'locked LP · 2,210 holders · clean',green:['committed','LP burned','community']},
+];
+const T0=1.2,CD=1.72,TEND=T0+CD*CARDS.length,TOUT=TEND+.3;
+const HUES=[340,30,270,200,10,300,180,50,330,250,120,0,280,160];
+function avatar(c,i){const h=HUES[i%HUES.length];const r=rng(i+3);let blobs='';for(let k=0;k<6;k++)blobs+=`<circle cx="${r()*430}" cy="${r()*440}" r="${60+r()*120}" fill="hsla(${(h+k*25)%360},90%,${55+r()*15}%,.55)"/>`;
+ return `<svg width="430" height="440" viewBox="0 0 430 440"><rect width="430" height="440" fill="hsl(${h},60%,18%)"/>${blobs}
+ <circle cx="215" cy="190" r="110" fill="rgba(0,0,0,.25)"/><text x="215" y="232" text-anchor="middle" font-family="RB" font-weight="900" font-size="${Math.min(110,Math.floor(560/(Math.min(c.t.length,7)+1.6)))}" fill="#fff" opacity=".95">$${c.t.length>8?c.t.slice(0,6)+'…':c.t}</text></svg>`}
+function cardHTML(c,i,tx,ty,rot,stamp,sa,showRead){const flagChip=c.v==N?`<span class="chip" style="color:#ff5a74;border-color:#ff5a74;background:rgba(255,90,116,.12)">🚩 ${FL[c.f]}</span>`:'';
+ const st=stamp?`<div class="stamp" style="${stamp=='NOPE'?'right:24px;color:#ff5a74;border-color:#ff5a74;transform:rotate(14deg)':'left:24px;color:#5dff8f;border-color:#5dff8f;transform:rotate(-14deg)'};opacity:${sa}">${stamp}</div>`:'';
+ return `<div class="card" style="transform:translate(${tx}px,${ty}px) rotate(${rot}deg)"><div class="av">${avatar(c,i)}</div><div class="shade"></div>
+ <div class="nm">$${c.t.length>11?c.t.slice(0,10)+'…':c.t}<span>, ${c.age}</span></div><div class="loc">📍 pump.fun · mc ${c.mc} · ${c.h} holders nearby</div>
+ <div class="bio">${c.bio}</div><div class="chips">${c.green.map(g=>`<span class="chip" style="color:#9df5bb;border-color:rgba(93,255,143,.5)">${g}</span>`).join('')}${showRead?flagChip:''}</div>
+ <div class="read" style="opacity:${showRead?1:0}"><b class="${c.v==N?'r':'g'}">Boo's read:</b> ${c.real}<br><span class="d">compatibility</span> <b class="${c.v==N?'r':'g'}">${c.v==N?(0.05+(i%5)*.04).toFixed(2)+' < 0.85':(0.86+(i%4)*.03).toFixed(2)+' ≥ 0.85'}</b><div style="margin-top:8px;height:6px;border-radius:3px;background:rgba(255,255,255,.1)"><div style="height:6px;border-radius:3px;width:${c.v==N?(5+(i%5)*4):(86+(i%4)*3)}%;background:${c.v==N?'#ff5a74':'#5dff8f'}"></div></div></div>${st}</div>`}
+// cat (no halloween, no headset)
+function plainCat(id){let s=catSVG(id);
+ s=s.replace(/<!-- hat -->[\s\S]*?<\/g>\s*<!-- eyes -->/,'<!-- eyes -->').replace(/<path d="M101,163[^>]*\/>/,'');
+ s=s.replace(/<g transform="translate\(99,190\) scale\(\.55\)">[\s\S]*?class="pglow">[\s\S]*?<\/g>\s*<\/g>/,'<path d="M104,198 C98,190 90,198 104,210 C118,198 110,190 104,198 Z" transform="translate(6,0)" fill="#ff4d8d"/>');
+ s=s.replace('stroke="#a66bff" stroke-width="2" opacity=".55"','stroke="#ff4d8d" stroke-width="2" opacity=".55"');return s}
+$('booW').innerHTML=plainCat('m');$('oBoo').innerHTML=plainCat('o');
+function setCat(root,state,t){const col={idle:['#ffb020','#ff6a00'],read:['#ffe14d','#ff9a00'],no:['#ff4d4d','#c4002a'],yes:['#ff7ab0','#ff2d7a']}[state];
+ root.style.setProperty('--ec',col[0]);root.style.setProperty('--ec2',col[1]);
+ const open=root.querySelector('.e-open'),happy=root.querySelector('.e-happy'),brow=root.querySelector('.e-brow');
+ happy.style.display=state=='yes'?'':'none';open.style.display=state=='yes'?'none':'';brow.style.display=state=='no'?'':'none';
+ happy.querySelectorAll('path').forEach(p=>p.setAttribute('stroke','#ff7ab0'));
+ const bl=(t%3)<.1&&state=='idle';open.setAttribute('transform',`translate(0,134) scale(1,${state=='read'?.6:bl?.1:1}) translate(0,-134)`);
+ root.querySelectorAll('.pup').forEach(p=>p.setAttribute('transform',`translate(${state=='read'?-5+Math.sin(t*6)*2:-3},${state=='read'?Math.sin(t*3)*3:0})`));
+ const id=root.querySelector('[id^=tail]').id.slice(4);root.querySelector('#tail'+id).setAttribute('transform',`rotate(${Math.sin(t*2.6)*9} 150 262)`);
+ root.querySelector('#head'+id).setAttribute('transform',`rotate(${state=='read'?-8:Math.sin(t*1.2)*3} 110 160)`)}
+function heart(x,y,s,col,a){return `<path transform="translate(${x},${y}) scale(${s})" d="M0,6 C-10,-6 -22,2 -14,12 L0,24 L14,12 C22,2 10,-6 0,6 Z" fill="${col}" opacity="${a}"/>`}
+function render(t){
+ const tt=Math.min(t,TEND);const k=tt<T0?-1:Math.min(CARDS.length-1,Math.floor((tt-T0)/CD));const u=k<0?0:tt-T0-k*CD;const c=k>=0?CARDS[k]:null;
+ const done=i=>i<k||(i==k&&u>=.95);
+ // phone clock
+ const mins=17*60+26+Math.floor(tt*2);$('pClock').textContent=`${Math.floor(mins/60)}:${String(mins%60).padStart(2,'0')}`;
+ // stack
+ let sh='';const PX=300,PY=150;let pawP=null,pawDown=false;
+ for(let j=Math.min(CARDS.length-1,Math.max(k,0)+2);j>=Math.max(k,0);j--){const cc=CARDS[j];
+  if(j>k&&k>=0||k<0){const depth=j-Math.max(k,0);sh+=`<div style="position:absolute;left:0;top:0;transform:translateY(${depth*-10}px) scale(${1-depth*.04});transform-origin:240px 800px;opacity:${1-depth*.25}">${cardHTML(cc,j,0,0,0,null,0,false)}</div>`;continue}
+  // current card
+  let tx=0,ty=0,rot=0,stamp=null,sa=0;const read=u>.3;
+  const dir=cc.v==N?-1:1;
+  if(u>.55){const dr=eio(clamp((u-.55)/.35));tx=dir*dr*90;rot=dir*dr*8;stamp=cc.v==N?'NOPE':'LIKE';sa=dr}
+  if(u>.9){const fl=eo(clamp((u-.9)/.3));tx=dir*(90+fl*620);ty=fl*60;rot=dir*(8+fl*22);sa=1}
+  sh+=`<div style="position:absolute;left:0;top:0">${cardHTML(cc,j,tx,ty,rot,stamp,sa,read)}</div>`;
+  if(u>.45&&u<1.0){pawDown=u>.55;const px=PX+240+tx*(u<.9?1:0)+(u>=.9?dir*90:0),py=PY+520+ty;pawP=[px,py]}}
+ if(k>=0&&u>=.9&&k+1<CARDS.length){/* next card already shown underneath */}
+ $('stack').innerHTML=sh;
+ // paw
+ $('paw').innerHTML=pawP?`<g transform="translate(${pawP[0]},${pawP[1]}) scale(${pawDown?1:1.08})" opacity="${pawDown?1:.85}"><ellipse cx="0" cy="18" rx="46" ry="38" fill="#07050a" stroke="#ff9a2e" stroke-width="4"/>
+  <ellipse cx="0" cy="26" rx="18" ry="14" fill="#ff7ab0"/>${[[-28,-12],[-10,-22],[10,-22],[28,-12]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="9" ry="11" fill="#ff7ab0"/>`).join('')}</g>`:'';
+ // buttons glow
+ const bn=$('bNo'),by=$('bYes');bn.style.boxShadow=c&&c.v==N&&u>.55&&u<1.2?'0 0 26px #ff5a74':'none';by.style.boxShadow=c&&c.v==Y&&u>.55&&u<1.2?'0 0 26px #5dff8f':'none';
+ bn.style.background=c&&c.v==N&&u>.85&&u<1.05?'rgba(255,90,116,.3)':'transparent';by.style.background=c&&c.v==Y&&u>.85&&u<1.05?'rgba(93,255,143,.25)':'transparent';
+ // match overlay
+ const mo=$('matchOv');if(c&&c.v==Y&&u>1.05&&u<1.72){const a=Math.min(eo(clamp((u-1.05)/.15)),1-clamp((u-1.55)/.17));mo.style.opacity=a;
+  mo.innerHTML=`<div style="position:absolute;left:0;right:0;top:190px;text-align:center;font-family:RB;font-weight:900;font-size:58px;color:#fff;text-shadow:0 0 24px #ff4d8d;transform:scale(${lerp(1.4,1,eo(clamp((u-1.05)/.2)))})">IT'S A MATCH</div>
+  <div style="position:absolute;left:0;right:0;top:268px;text-align:center;font-size:14px">Boo and $${c.t} liked each other</div>
+  <div style="position:absolute;left:80px;top:330px;width:140px;height:140px;border-radius:50%;overflow:hidden;border:4px solid #fff;background:#07050a"><div style="position:absolute;left:-20px;top:-4px;width:180px;height:236px">${plainCat('x'+k)}</div></div>
+  <div style="position:absolute;left:260px;top:330px;width:140px;height:140px;border-radius:50%;overflow:hidden;border:4px solid #fff"><div style="transform:scale(.33);transform-origin:0 0;position:absolute;left:0;top:-4px">${avatar(c,k)}</div></div>
+  <div style="position:absolute;left:0;right:0;top:500px;text-align:center;font-size:62px;font-weight:800;color:#5dff8f;text-shadow:0 0 20px #5dff8f">+${c.pnl.toFixed(2)} SOL</div>
+  <div style="position:absolute;left:70px;right:70px;top:600px;height:54px;border-radius:27px;background:#ff4d8d;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px">ape 0.5 · tp 2x / 4x</div>`;
+  const xc=$('matchOv').querySelector('svg');if(xc)setCat(xc,'yes',t)}else mo.style.opacity=0;
+ // hearts burst
+ let hh='';if(c&&c.v==Y&&u>1.05){const uu=clamp((u-1.05)/.9);for(let s=0;s<16;s++){const r=rng(k*50+s);const x=540+(r()-.5)*500,y=900-uu*(400+r()*500);hh+=heart(r()<.5?x*.35+40:x*.3+760,y,1+r()*1.4,['#ff4d8d','#ff7ab0','#5dff8f'][s%3],(1-uu)*.8)}}
+ $('hearts').innerHTML=hh;
+ // flags panel
+ $('flags').innerHTML=FL.map((f,i)=>{const hit=CARDS.find((x,j)=>x.v==N&&x.f==i&&done(j));const now=c&&c.v==N&&c.f==i&&u>.3&&u<1.6;
+  return `<div class="row" style="${now?'background:rgba(255,90,116,.18);border-radius:8px;padding:0 6px;':''}"><span style="color:${now?'#fff':hit?'#ff8aa0':'#9a7f92'}">${hit||now?'🚩':'○'} ${f}</span><span class="${hit?'r':'d'}" style="font-size:10.5px">${hit?'$'+hit.t:now?'checking…':'—'}</span></div>`}).join('');
+ // matches
+ const ms=CARDS.filter((x,j)=>x.v==Y&&(j<k||(j==k&&u>=1.1)));$('mTag').textContent=ms.length;
+ $('matches').innerHTML=ms.map(m=>`<div class="row"><span><span class="pk">♥</span> $${m.t}</span><span class="g">+${m.pnl.toFixed(2)}</span></div>`).join('')||'<div class="d" style="font-size:11px;margin-top:8px">no matches yet. Boo is picky.</div>';
+ const pnl=CARDS.reduce((s,x,j)=>s+(x.v==Y?x.pnl*eo(clamp((tt-(T0+j*CD+1.1))/.4)):0),0);$('score').textContent='+'+pnl.toFixed(2);
+ $('nNo').textContent=CARDS.filter((x,j)=>x.v==N&&done(j)).length;$('nYes').textContent=CARDS.filter((x,j)=>x.v==Y&&done(j)).length;
+ $('pFoot').textContent=`Boo is swiping · ${CARDS.length-Math.max(0,k)-(k>=0&&u>=.95?1:0)} profiles left`;
+ // bubble
+ let st='idle',bt='',bc='#ffd34d';if(c){if(u<.3){st='idle';bt='next.'}else if(u<.6){st='read';bt='reading the bio…'}else{st=c.v==N?'no':'yes';bt=c.v==N?['ew.','red flag.','nope.','not my type.'][k%4]:'oh hello ♥';bc=c.v==N?'#ff5a74':'#ff7ab0'}}else bt='let\'s see who\'s here';
+ setCat($('booW').querySelector('svg'),st,t);const b=$('bub');b.textContent=bt;b.style.borderColor=bc;b.style.color=bc;b.style.boxShadow=`0 0 12px ${bc}`;
+ // dms
+ const dm=[];CARDS.forEach((x,j)=>{if(x.v!=Y||!(j<k||(j==k&&u>=1.4)))return;dm.push(`<span class="pk">$${x.t}:</span> ${['hey 👋','so... what are we?','u up?','I like your chart','wanna hold?'][j%5]} &nbsp;<span class="o">Boo:</span> tp at 2x. it's not you, it's my strategy. <span class="g">(+${x.pnl.toFixed(2)} SOL)</span>`)});
+ $('dms').innerHTML=dm.slice(-5).join('<br>')||'<span class="d">no messages yet</span>';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ let f=0,fc='255,90,116';if(c&&u>.9&&u<1.1){f=.1*(1-(u-.9)/.2);fc=c.v==N?'255,90,116':'255,77,141'}$('flash').style.opacity=f;$('flash').style.background=`radial-gradient(circle at 50% 45%,rgba(${fc},0),rgba(${fc},.85))`;
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;$('app').style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){[['o1',0],['o2',.3],['o3',.7],['o4',.9],['o5',1.05],['o6',1.4],['o7',1.7],['o8',1.8]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`+(id=='o1'?` scale(${lerp(.7,1,v)})`:'')});
+ const ca=eo(clamp((s-.2)/.6));$('oBoo').style.opacity=ca;$('oBoo').style.transform=`translateY(${(1-ca)*50+Math.sin(s*3)*3}px)`;setCat($('oBoo').querySelector('svg'),s<1.4?'yes':'no',t);
+ let h='';for(let i=0;i<26;i++){const r=rng(700+i);const ph=((s*.35+r())%1);h+=heart(r()*1080,1350-ph*1500,.8+r()*1.2,['#ff4d8d','#ff7ab0','#ff9a2e'][i%3],.25*(1-ph))}$('oH').innerHTML=h}
+window.render=render;
+Promise.all(['700 13px JB','800 12px JB','900 40px RB','700 28px RB','400 12px JB'].map(f=>document.fonts.load(f))).then(()=>document.fonts.ready).then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>

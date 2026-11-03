@@ -103,6 +103,7 @@ Sample output:
 | `terminal/part3.html` | **III · The Séance**: ghosts of buried rugs snitch on their devs' new launches | +31.31 SOL |
 | `terminal/rider.html` | **BOO RIDER**: arcade run, catch pumps, jump rugs, paint the chart | +21.37 SOL |
 | `terminal/nightshift.html` | **NIGHT SHIFT**: you sleep 00:00 → 08:00, Boo trades at the desk | +24.80 SOL |
+| `terminal/swipes.html` | **BOO SWIPES**: memecoins as dating profiles, swipe left on red flags | +15.50 SOL |
 
 Export any episode: `node scripts/render.js out.mp4 [audio] part2.html`
 
